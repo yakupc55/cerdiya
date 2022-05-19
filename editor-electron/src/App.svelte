@@ -1,30 +1,22 @@
 <script>
-	export let name;
+
 </script>
 
-<main>
-	<h1>Hello {name}!</h1>
-	<p>Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn how to build Svelte apps.</p>
-</main>
+<head>
+	<link rel='stylesheet' href='vendor/bootstrap/css/bootstrap.min.css'>
+<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+</head>
 
-<style>
-	main {
-		text-align: center;
-		padding: 1em;
-		max-width: 240px;
-		margin: 0 auto;
-	}
-
-	h1 {
-		color: #ff3e00;
-		text-transform: uppercase;
-		font-size: 4em;
-		font-weight: 100;
-	}
-
-	@media (min-width: 640px) {
-		main {
-			max-width: none;
-		}
-	}
-</style>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+	<a class="navbar-brand" href="#">Cerdiya</a>
+	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+	  <span class="navbar-toggler-icon"></span>
+	</button>
+	<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+	  <div class="navbar-nav">
+		<a class="nav-item nav-link active" href="#">Add file </a>
+		<a class="nav-item nav-link" href="#">page 1</a>
+		<a class="nav-item nav-link" href="#">Page 2</a>
+	  </div>
+	</div>
+  </nav>
