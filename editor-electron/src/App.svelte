@@ -1,5 +1,5 @@
 <script>
-
+import { Router, Route, Link } from "svelte-routing";
 </script>
 
 <head>
