@@ -126,6 +126,12 @@ var app = (function () {
     function detach(node) {
         node.parentNode.removeChild(node);
     }
+    function destroy_each(iterations, detaching) {
+        for (let i = 0; i < iterations.length; i += 1) {
+            if (iterations[i])
+                iterations[i].d(detaching);
+        }
+    }
     function element(name) {
         return document.createElement(name);
     }
@@ -542,6 +548,22 @@ var app = (function () {
         else
             dispatch_dev('SvelteDOMSetAttribute', { node, attribute, value });
     }
+    function set_data_dev(text, data) {
+        data = '' + data;
+        if (text.wholeText === data)
+            return;
+        dispatch_dev('SvelteDOMSetData', { node: text, data });
+        text.data = data;
+    }
+    function validate_each_argument(arg) {
+        if (typeof arg !== 'string' && !(arg && typeof arg === 'object' && 'length' in arg)) {
+            let msg = '{#each} only iterates over array-like objects.';
+            if (typeof Symbol === 'function' && arg && Symbol.iterator in arg) {
+                msg += ' You can use a spread to convert this iterable into an array.';
+            }
+            throw new Error(msg);
+        }
+    }
     function validate_slots(name, slot, keys) {
         for (const slot_key of Object.keys(slot)) {
             if (!~keys.indexOf(slot_key)) {
@@ -638,26 +660,220 @@ var app = (function () {
     const { console: console_1 } = globals;
     const file$1 = "src\\AddFile.svelte";
 
+    function get_each_context(ctx, list, i) {
+    	const child_ctx = ctx.slice();
+    	child_ctx[1] = list[i];
+    	child_ctx[3] = i;
+    	return child_ctx;
+    }
+
+    // (53:0) {:else}
+    function create_else_block(ctx) {
+    	let h2;
+
+    	const block = {
+    		c: function create() {
+    			h2 = element("h2");
+    			h2.textContent = "list is empty";
+    			add_location(h2, file$1, 53, 0, 1331);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, h2, anchor);
+    		},
+    		p: noop,
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(h2);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_else_block.name,
+    		type: "else",
+    		source: "(53:0) {:else}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (48:0) {#if FileList.length>0}
+    function create_if_block(ctx) {
+    	let h2;
+    	let t0_value = /*FileList*/ ctx[0].length + "";
+    	let t0;
+    	let t1;
+    	let each_1_anchor;
+    	let each_value = /*FileList*/ ctx[0];
+    	validate_each_argument(each_value);
+    	let each_blocks = [];
+
+    	for (let i = 0; i < each_value.length; i += 1) {
+    		each_blocks[i] = create_each_block(get_each_context(ctx, each_value, i));
+    	}
+
+    	const block = {
+    		c: function create() {
+    			h2 = element("h2");
+    			t0 = text(t0_value);
+    			t1 = space();
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].c();
+    			}
+
+    			each_1_anchor = empty();
+    			add_location(h2, file$1, 48, 0, 1220);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, h2, anchor);
+    			append_dev(h2, t0);
+    			insert_dev(target, t1, anchor);
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].m(target, anchor);
+    			}
+
+    			insert_dev(target, each_1_anchor, anchor);
+    		},
+    		p: function update(ctx, dirty) {
+    			if (dirty & /*FileList*/ 1 && t0_value !== (t0_value = /*FileList*/ ctx[0].length + "")) set_data_dev(t0, t0_value);
+
+    			if (dirty & /*FileList*/ 1) {
+    				each_value = /*FileList*/ ctx[0];
+    				validate_each_argument(each_value);
+    				let i;
+
+    				for (i = 0; i < each_value.length; i += 1) {
+    					const child_ctx = get_each_context(ctx, each_value, i);
+
+    					if (each_blocks[i]) {
+    						each_blocks[i].p(child_ctx, dirty);
+    					} else {
+    						each_blocks[i] = create_each_block(child_ctx);
+    						each_blocks[i].c();
+    						each_blocks[i].m(each_1_anchor.parentNode, each_1_anchor);
+    					}
+    				}
+
+    				for (; i < each_blocks.length; i += 1) {
+    					each_blocks[i].d(1);
+    				}
+
+    				each_blocks.length = each_value.length;
+    			}
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(h2);
+    			if (detaching) detach_dev(t1);
+    			destroy_each(each_blocks, detaching);
+    			if (detaching) detach_dev(each_1_anchor);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_if_block.name,
+    		type: "if",
+    		source: "(48:0) {#if FileList.length>0}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (50:0) {#each FileList as item, index}
+    function create_each_block(ctx) {
+    	let h4;
+    	let t0;
+    	let t1;
+    	let t2_value = /*item*/ ctx[1].name + "";
+    	let t2;
+
+    	const block = {
+    		c: function create() {
+    			h4 = element("h4");
+    			t0 = text(/*index*/ ctx[3]);
+    			t1 = text(". ");
+    			t2 = text(t2_value);
+    			add_location(h4, file$1, 50, 0, 1281);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, h4, anchor);
+    			append_dev(h4, t0);
+    			append_dev(h4, t1);
+    			append_dev(h4, t2);
+    		},
+    		p: function update(ctx, dirty) {
+    			if (dirty & /*FileList*/ 1 && t2_value !== (t2_value = /*item*/ ctx[1].name + "")) set_data_dev(t2, t2_value);
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(h4);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_each_block.name,
+    		type: "each",
+    		source: "(50:0) {#each FileList as item, index}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
     function create_fragment$1(ctx) {
     	let h1;
+    	let t1;
+    	let if_block_anchor;
+
+    	function select_block_type(ctx, dirty) {
+    		if (/*FileList*/ ctx[0].length > 0) return create_if_block;
+    		return create_else_block;
+    	}
+
+    	let current_block_type = select_block_type(ctx);
+    	let if_block = current_block_type(ctx);
 
     	const block = {
     		c: function create() {
     			h1 = element("h1");
-    			h1.textContent = "This a test page";
-    			add_location(h1, file$1, 25, 0, 652);
+    			h1.textContent = "File list";
+    			t1 = space();
+    			if_block.c();
+    			if_block_anchor = empty();
+    			add_location(h1, file$1, 44, 0, 1166);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, h1, anchor);
+    			insert_dev(target, t1, anchor);
+    			if_block.m(target, anchor);
+    			insert_dev(target, if_block_anchor, anchor);
     		},
-    		p: noop,
+    		p: function update(ctx, [dirty]) {
+    			if (current_block_type === (current_block_type = select_block_type(ctx)) && if_block) {
+    				if_block.p(ctx, dirty);
+    			} else {
+    				if_block.d(1);
+    				if_block = current_block_type(ctx);
+
+    				if (if_block) {
+    					if_block.c();
+    					if_block.m(if_block_anchor.parentNode, if_block_anchor);
+    				}
+    			}
+    		},
     		i: noop,
     		o: noop,
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(h1);
+    			if (detaching) detach_dev(t1);
+    			if_block.d(detaching);
+    			if (detaching) detach_dev(if_block_anchor);
     		}
     	};
 
@@ -672,18 +888,40 @@ var app = (function () {
     	return block;
     }
 
-    function instance$1($$self, $$props) {
+    function instance$1($$self, $$props, $$invalidate) {
     	let { $$slots: slots = {}, $$scope } = $$props;
     	validate_slots('AddFile', slots, []);
+    	let FileList = [];
 
     	document.addEventListener('drop', event => {
+    		let files = [];
     		event.preventDefault();
     		event.stopPropagation();
 
     		for (const f of event.dataTransfer.files) {
-    			// Using the path attribute to get absolute file path
-    			console.log('File Path of dragged files: ', f.path);
+    			let exist = false;
+    			console.log("step 1 if");
+
+    			for (const item of FileList) {
+    				console.log("step 2");
+
+    				if (item.path === f.path) {
+    					exist = true;
+    					break;
+    				}
+    			}
+
+    			if (exist) {
+    				console.log("step 3 if");
+    				alert("this file is exist.\n" + f.path);
+    				console.log("this file is exist.\n" + f.path);
+    			} else {
+    				console.log("step 3 else");
+    				files = [...files, { path: f.path, name: f.name }];
+    			}
     		}
+
+    		$$invalidate(0, FileList = [...FileList, ...files]);
     	});
 
     	document.addEventListener('dragover', e => {
@@ -705,7 +943,17 @@ var app = (function () {
     		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console_1.warn(`<AddFile> was created with unknown prop '${key}'`);
     	});
 
-    	return [];
+    	$$self.$capture_state = () => ({ FileList });
+
+    	$$self.$inject_state = $$props => {
+    		if ('FileList' in $$props) $$invalidate(0, FileList = $$props.FileList);
+    	};
+
+    	if ($$props && "$$inject" in $$props) {
+    		$$self.$inject_state($$props.$$inject);
+    	}
+
+    	return [FileList];
     }
 
     class AddFile extends SvelteComponentDev {
@@ -1575,12 +1823,12 @@ var app = (function () {
     });
 
     // (40:0) {#if $activeRoute !== null && $activeRoute.route === route}
-    function create_if_block(ctx) {
+    function create_if_block$1(ctx) {
     	let current_block_type_index;
     	let if_block;
     	let if_block_anchor;
     	let current;
-    	const if_block_creators = [create_if_block_1, create_else_block];
+    	const if_block_creators = [create_if_block_1, create_else_block$1];
     	const if_blocks = [];
 
     	function select_block_type(ctx, dirty) {
@@ -1645,7 +1893,7 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block.name,
+    		id: create_if_block$1.name,
     		type: "if",
     		source: "(40:0) {#if $activeRoute !== null && $activeRoute.route === route}",
     		ctx
@@ -1655,7 +1903,7 @@ var app = (function () {
     }
 
     // (43:2) {:else}
-    function create_else_block(ctx) {
+    function create_else_block$1(ctx) {
     	let current;
     	const default_slot_template = /*#slots*/ ctx[10].default;
     	const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ ctx[9], get_default_slot_context);
@@ -1703,7 +1951,7 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_else_block.name,
+    		id: create_else_block$1.name,
     		type: "else",
     		source: "(43:2) {:else}",
     		ctx
@@ -1818,7 +2066,7 @@ var app = (function () {
     function create_fragment$3(ctx) {
     	let if_block_anchor;
     	let current;
-    	let if_block = /*$activeRoute*/ ctx[1] !== null && /*$activeRoute*/ ctx[1].route === /*route*/ ctx[7] && create_if_block(ctx);
+    	let if_block = /*$activeRoute*/ ctx[1] !== null && /*$activeRoute*/ ctx[1].route === /*route*/ ctx[7] && create_if_block$1(ctx);
 
     	const block = {
     		c: function create() {
@@ -1842,7 +2090,7 @@ var app = (function () {
     						transition_in(if_block, 1);
     					}
     				} else {
-    					if_block = create_if_block(ctx);
+    					if_block = create_if_block$1(ctx);
     					if_block.c();
     					transition_in(if_block, 1);
     					if_block.m(if_block_anchor.parentNode, if_block_anchor);
