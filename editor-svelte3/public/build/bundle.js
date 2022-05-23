@@ -662,12 +662,12 @@ var app = (function () {
 
     function get_each_context(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[1] = list[i];
-    	child_ctx[3] = i;
+    	child_ctx[6] = list[i];
+    	child_ctx[8] = i;
     	return child_ctx;
     }
 
-    // (53:0) {:else}
+    // (117:0) {:else}
     function create_else_block(ctx) {
     	let h2;
 
@@ -675,7 +675,7 @@ var app = (function () {
     		c: function create() {
     			h2 = element("h2");
     			h2.textContent = "list is empty";
-    			add_location(h2, file$1, 53, 0, 1331);
+    			add_location(h2, file$1, 117, 0, 3719);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, h2, anchor);
@@ -690,14 +690,14 @@ var app = (function () {
     		block,
     		id: create_else_block.name,
     		type: "else",
-    		source: "(53:0) {:else}",
+    		source: "(117:0) {:else}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (48:0) {#if FileList.length>0}
+    // (112:0) {#if FileList.length>0}
     function create_if_block(ctx) {
     	let h2;
     	let t0_value = /*FileList*/ ctx[0].length + "";
@@ -723,7 +723,7 @@ var app = (function () {
     			}
 
     			each_1_anchor = empty();
-    			add_location(h2, file$1, 48, 0, 1220);
+    			add_location(h2, file$1, 112, 0, 3608);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, h2, anchor);
@@ -775,28 +775,28 @@ var app = (function () {
     		block,
     		id: create_if_block.name,
     		type: "if",
-    		source: "(48:0) {#if FileList.length>0}",
+    		source: "(112:0) {#if FileList.length>0}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (50:0) {#each FileList as item, index}
+    // (114:0) {#each FileList as item, index}
     function create_each_block(ctx) {
     	let h4;
     	let t0;
     	let t1;
-    	let t2_value = /*item*/ ctx[1].name + "";
+    	let t2_value = /*item*/ ctx[6].name + "";
     	let t2;
 
     	const block = {
     		c: function create() {
     			h4 = element("h4");
-    			t0 = text(/*index*/ ctx[3]);
+    			t0 = text(/*index*/ ctx[8]);
     			t1 = text(". ");
     			t2 = text(t2_value);
-    			add_location(h4, file$1, 50, 0, 1281);
+    			add_location(h4, file$1, 114, 0, 3669);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, h4, anchor);
@@ -805,7 +805,7 @@ var app = (function () {
     			append_dev(h4, t2);
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*FileList*/ 1 && t2_value !== (t2_value = /*item*/ ctx[1].name + "")) set_data_dev(t2, t2_value);
+    			if (dirty & /*FileList*/ 1 && t2_value !== (t2_value = /*item*/ ctx[6].name + "")) set_data_dev(t2, t2_value);
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(h4);
@@ -816,7 +816,7 @@ var app = (function () {
     		block,
     		id: create_each_block.name,
     		type: "each",
-    		source: "(50:0) {#each FileList as item, index}",
+    		source: "(114:0) {#each FileList as item, index}",
     		ctx
     	});
 
@@ -824,9 +824,13 @@ var app = (function () {
     }
 
     function create_fragment$1(ctx) {
-    	let h1;
+    	let button;
     	let t1;
+    	let h1;
+    	let t3;
     	let if_block_anchor;
+    	let mounted;
+    	let dispose;
 
     	function select_block_type(ctx, dirty) {
     		if (/*FileList*/ ctx[0].length > 0) return create_if_block;
@@ -838,21 +842,32 @@ var app = (function () {
 
     	const block = {
     		c: function create() {
+    			button = element("button");
+    			button.textContent = "Upload File";
+    			t1 = space();
     			h1 = element("h1");
     			h1.textContent = "File list";
-    			t1 = space();
+    			t3 = space();
     			if_block.c();
     			if_block_anchor = empty();
-    			add_location(h1, file$1, 44, 0, 1166);
+    			add_location(button, file$1, 107, 0, 3497);
+    			add_location(h1, file$1, 108, 0, 3554);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
     		},
     		m: function mount(target, anchor) {
-    			insert_dev(target, h1, anchor);
+    			insert_dev(target, button, anchor);
     			insert_dev(target, t1, anchor);
+    			insert_dev(target, h1, anchor);
+    			insert_dev(target, t3, anchor);
     			if_block.m(target, anchor);
     			insert_dev(target, if_block_anchor, anchor);
+
+    			if (!mounted) {
+    				dispose = listen_dev(button, "click", /*addFileFunction*/ ctx[1], false, false, false);
+    				mounted = true;
+    			}
     		},
     		p: function update(ctx, [dirty]) {
     			if (current_block_type === (current_block_type = select_block_type(ctx)) && if_block) {
@@ -870,10 +885,14 @@ var app = (function () {
     		i: noop,
     		o: noop,
     		d: function destroy(detaching) {
-    			if (detaching) detach_dev(h1);
+    			if (detaching) detach_dev(button);
     			if (detaching) detach_dev(t1);
+    			if (detaching) detach_dev(h1);
+    			if (detaching) detach_dev(t3);
     			if_block.d(detaching);
     			if (detaching) detach_dev(if_block_anchor);
+    			mounted = false;
+    			dispose();
     		}
     	};
 
@@ -891,6 +910,75 @@ var app = (function () {
     function instance$1($$self, $$props, $$invalidate) {
     	let { $$slots: slots = {}, $$scope } = $$props;
     	validate_slots('AddFile', slots, []);
+    	const electron = require('electron');
+    	const path = require('path');
+
+    	// Importing dialog module using remote
+    	const dialog = electron.remote.dialog;
+
+    	const addFileFunction = () => {
+    		// If the platform is 'win32' or 'Linux'
+    		if (process.platform !== 'darwin') {
+    			// Resolves to a Promise<Object>
+    			dialog.showOpenDialog({
+    				title: 'Select the File to be uploaded',
+    				defaultPath: path.join(__dirname, '../assets/'),
+    				buttonLabel: 'Upload',
+    				// Restricting the user to only Text Files.
+    				filters: [
+    					{
+    						name: 'Text Files',
+    						extensions: ['txt', 'docx']
+    					}
+    				],
+    				// Specifying the File Selector Property
+    				properties: ['openFile']
+    			}).then(file => {
+    				// Stating whether dialog operation was
+    				// cancelled or not.
+    				console.log(file.canceled);
+
+    				if (!file.canceled) {
+    					// Updating the GLOBAL filepath variable 
+    					// to user-selected file.
+    					console.log(global);
+
+    					global.filepath = file.filePaths[0].toString();
+    					console.log(path.basename(global.filepath));
+    					console.log(global.filepath);
+    				}
+    			}).catch(err => {
+    				console.log(err);
+    			});
+    		} else {
+    			// If the platform is 'darwin' (macOS)
+    			dialog.showOpenDialog({
+    				title: 'Select the File to be uploaded',
+    				defaultPath: path.join(__dirname, '../assets/'),
+    				buttonLabel: 'Upload',
+    				filters: [
+    					{
+    						name: 'Text Files',
+    						extensions: ['txt', 'docx']
+    					}
+    				],
+    				// Specifying the File Selector and Directory 
+    				// Selector Property In macOS
+    				properties: ['openFile', 'openDirectory']
+    			}).then(file => {
+    				console.log(file.canceled);
+
+    				if (!file.canceled) {
+    					global.filepath = file.filePaths[0].toString();
+    					console.log(global.filepath);
+    				}
+    			}).catch(err => {
+    				console.log(err);
+    			});
+    		}
+    	};
+
+    	var uploadFile = document.getElementById('upload');
     	let FileList = [];
 
     	document.addEventListener('drop', event => {
@@ -943,9 +1031,17 @@ var app = (function () {
     		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console_1.warn(`<AddFile> was created with unknown prop '${key}'`);
     	});
 
-    	$$self.$capture_state = () => ({ FileList });
+    	$$self.$capture_state = () => ({
+    		electron,
+    		path,
+    		dialog,
+    		addFileFunction,
+    		uploadFile,
+    		FileList
+    	});
 
     	$$self.$inject_state = $$props => {
+    		if ('uploadFile' in $$props) uploadFile = $$props.uploadFile;
     		if ('FileList' in $$props) $$invalidate(0, FileList = $$props.FileList);
     	};
 
@@ -953,7 +1049,7 @@ var app = (function () {
     		$$self.$inject_state($$props.$$inject);
     	}
 
-    	return [FileList];
+    	return [FileList, addFileFunction];
     }
 
     class AddFile extends SvelteComponentDev {
