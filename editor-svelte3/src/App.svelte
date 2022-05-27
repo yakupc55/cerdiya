@@ -4,6 +4,7 @@
 	import AddFile from './AddFile.svelte';
 	import { Router, Route, Link,navigate } from "svelte-routing";
 	import { onMount } from 'svelte';
+import TestPage from './TestPage.svelte';
 
 	export let url = "";
 	let FileList= [];
@@ -14,12 +15,6 @@
 	onMount(async () => {
 		navigate("/", { replace: true });
 		console.log(document.location);
-		if (!('indexedDB' in window)) {
-  			console.log('This browser doesn\'t support IndexedDB');
-		}
-		else{
-			console.log("this browser supports IndexedDB");
-		}
 	});
 	</script>
 	
@@ -35,8 +30,9 @@
 		</button>
 		<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
 		  <div class="navbar-nav">
-			<Link to="addFile" class="nav-item nav-link active" >Add file </Link>
-			<Link to="fileStructure" class="nav-item nav-link active" >file structure </Link>
+			<Link to="addFile" class="nav-item nav-link" >Add file </Link>
+			<Link to="fileStructure" class="nav-item nav-link" >file structure </Link>
+			<Link to="testPage" class="nav-item nav-link" >test page </Link>
 		  </div>
 		</div>
 	</nav>
@@ -44,6 +40,7 @@
 		<Route path="addFile" ><AddFile  /></Route>
 		<Route path="fileStructure" component="{FileStructure}" />
 		<Route path="/"><Home /></Route>
+		<Route path="testPage"><TestPage /></Route>
 	</div>
 	
 	</Router>
