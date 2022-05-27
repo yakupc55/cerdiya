@@ -1,8 +1,12 @@
 {
   "version": 3,
   "file": "bundle.css",
-  "sources": [],
-  "sourcesContent": [],
+  "sources": [
+    "..\\..\\fa.svelte"
+  ],
+  "sourcesContent": [
+    "<script>\nimport {\n  joinCss,\n  getStyles,\n  getTransform,\n} from './utils';\n\nlet clazz = '';\nexport { clazz as class };\nexport let id = '';\nexport let style = '';\n\nexport let icon;\n\nexport let size = '';\nexport let color = '';\n\nexport let fw = false;\nexport let pull = '';\n\nexport let scale = 1;\nexport let translateX = 0;\nexport let translateY = 0;\nexport let rotate = '';\nexport let flip = false;\n\nexport let spin = false;\nexport let pulse = false;\n\n// Duotone Icons\nexport let primaryColor = '';\nexport let secondaryColor = '';\nexport let primaryOpacity = 1;\nexport let secondaryOpacity = 0.4;\nexport let swapOpacity = false;\n\nlet i;\nlet c;\nlet s;\nlet transform;\n\n$: i = (icon && icon.icon) || [0, 0, '', [], ''];\n\n$: c = joinCss(\n  [\n    clazz,\n    'svelte-fa',\n    spin && 'spin',\n    pulse && 'pulse',\n  ],\n  ' ',\n);\n\n$: s = getStyles(style, size, pull, fw);\n\n$: transform = getTransform(scale, translateX, translateY, rotate, flip, 512);\n</script>\n\n<style>\n.spin {\n  animation: spin 2s 0s infinite linear;\n}\n\n.pulse {\n  animation: spin 1s infinite steps(8);\n}\n\n@keyframes spin {\n  0% {\n    transform: rotate(0deg);\n  }\n  100% {\n    transform: rotate(360deg);\n  }\n}\n</style>\n\n{#if i[4]}\n  <svg\n    {id}\n    class={c}\n    style={s}\n    viewBox={`0 0 ${i[0]} ${i[1]}`}\n    aria-hidden=\"true\"\n    role=\"img\"\n    xmlns=\"http://www.w3.org/2000/svg\"\n  >\n    <g\n      transform={`translate(${i[0] / 2} ${i[1] / 2})`}\n      transform-origin={`${i[0] / 4} 0`}\n    >\n      <g {transform}>\n        {#if typeof i[4] == 'string'}\n          <path\n            d={i[4]}\n            fill={color || primaryColor || 'currentColor'}\n            transform={`translate(${i[0] / -2} ${i[1] / -2})`}\n          />\n        {:else}\n          <path\n            d={i[4][0]}\n            fill={secondaryColor || color || 'currentColor'}\n            fill-opacity={swapOpacity != false ? primaryOpacity : secondaryOpacity}\n            transform={`translate(${i[0] / -2} ${i[1] / -2})`}\n          />\n          <path\n            d={i[4][1]}\n            fill={primaryColor || color || 'currentColor'}\n            fill-opacity={swapOpacity != false ? secondaryOpacity : primaryOpacity}\n            transform={`translate(${i[0] / -2} ${i[1] / -2})`}\n          />\n        {/if}\n      </g>\n    </g>\n  </svg>\n{/if}\n"
+  ],
   "names": [],
-  "mappings": ""
+  "mappings": "AA2DA,KAAK,eAAC,CAAC,AACL,SAAS,CAAE,mBAAI,CAAC,EAAE,CAAC,EAAE,CAAC,QAAQ,CAAC,MAAM,AACvC,CAAC,AAED,MAAM,eAAC,CAAC,AACN,SAAS,CAAE,mBAAI,CAAC,EAAE,CAAC,QAAQ,CAAC,MAAM,CAAC,CAAC,AACtC,CAAC,AAED,WAAW,mBAAK,CAAC,AACf,EAAE,AAAC,CAAC,AACF,SAAS,CAAE,OAAO,IAAI,CAAC,AACzB,CAAC,AACD,IAAI,AAAC,CAAC,AACJ,SAAS,CAAE,OAAO,MAAM,CAAC,AAC3B,CAAC,AACH,CAAC"
 }

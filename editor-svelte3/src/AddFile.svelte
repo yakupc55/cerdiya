@@ -1,7 +1,9 @@
 <script>
+	import Fa from 'svelte-fa';
+    import {faCircleMinus} from '@fortawesome/free-solid-svg-icons'
     const electron = require('electron');
     const path = require('path');
-
+    export let FileList=[];
     // Importing dialog module using remote
     const dialog = electron.remote.dialog;
 
@@ -63,7 +65,7 @@
     }
 }
     var uploadFile = document.getElementById('upload');
-    let FileList=[];
+
 
     document.addEventListener('drop', (event) => {
     let files=[];
@@ -71,21 +73,16 @@
     event.stopPropagation();
     for (const f of event.dataTransfer.files) {
         let exist=false;
-        console.log("step 1 if");
         for(const item of FileList){
-            console.log("step 2");
             if(item.path === f.path){
                 exist=true;
                 break;  
             }
         }
         if(exist){
-            console.log("step 3 if");
             alert("this file is exist.\n"+f.path);
-            console.log("this file is exist.\n"+f.path);
         }
         else{
-            console.log("step 3 else");
             files= [...files,{path:f.path,name:f.name}];
         }
     }
@@ -104,6 +101,10 @@ document.addEventListener('dragenter', (event) => {
 document.addEventListener('dragleave', (event) => {
     console.log('File has left the Drop Space');
 });
+
+const deleteFile= (path)=>{
+    FileList = FileList.filter(x => x.path!=path);
+}
 </script>
 <button on:click={addFileFunction}>Upload File</button>
 <h1>
@@ -112,7 +113,7 @@ document.addEventListener('dragleave', (event) => {
 {#if FileList.length>0}
 <h2>{FileList.length}</h2>
 {#each FileList as item, index}
-<h4>{index}. {item.name}</h4>
+<h4>{index}. {item.name} <div on:click={deleteFile(item.path)}><Fa icon={faCircleMinus} color="red" /></div></h4>
 {/each} 
 {:else}
 <h2>list is empty</h2>
