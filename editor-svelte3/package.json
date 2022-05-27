@@ -12,7 +12,8 @@
     "lint": "echo \"No linting configured\"",
     "svelte-build": "rollup -c",
     "svelte-dev": "rollup -c -w -s",
-    "svelte-start": "sirv public -s"
+    "svelte-start": "sirv public -s",
+    "rebuild node-pty": "electron-rebuild -f -w node-pty"
   },
   "keywords": [],
   "author": "jeffd23",
