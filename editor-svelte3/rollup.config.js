@@ -61,7 +61,7 @@ function serve() {
 			if (!started) {
 				started = true;
 
-				require('child_process').spawn('npm', ['run', 'svelte-start', '--', '--dev'], {
+				require('child_process').spawn('npm', ['run', 'svelte-start', '--', '--dev',"--single"], {
 					stdio: ['ignore', 'inherit', 'inherit'],
 					shell: true
 				});
