@@ -107,14 +107,29 @@ const deleteFile= (path)=>{
 }
 </script>
 <button on:click={addFileFunction}>Upload File</button>
-<h1>
-    File list 
-</h1>
 {#if FileList.length>0}
-<h2>{FileList.length}</h2>
-{#each FileList as item, index}
-<h4>{index}. {item.name} <div on:click={deleteFile(item.path)}><Fa icon={faCircleMinus} color="red" /></div></h4>
-{/each} 
+<table class="table table-striped table-dark">
+    <thead>
+      <tr>
+        <th scope="col">index</th>
+        <th scope="col">Name</th>
+        <th scope="col">Path</th>
+        <th scope="col">Tools</th>
+      </tr>
+    </thead>
+    <tbody>
+        {#each FileList as item, index}
+        <!-- <h4>{index}. {item.name} <span on:click={deleteFile(item.path)}><Fa icon={faCircleMinus} color="red" /></span></h4> -->
+        <tr>
+            <th scope="row">{index}</th>
+            <td>{item.name}</td>
+            <td>{item.path}</td>
+            <td><span on:click={deleteFile(item.path)}><Fa icon={faCircleMinus} color="red" /></span></td>
+        </tr>
+        
+        {/each} 
+</tbody>
+</table>
 {:else}
-<h2>list is empty</h2>
+<h2>You didn't add any file</h2>
 {/if}
