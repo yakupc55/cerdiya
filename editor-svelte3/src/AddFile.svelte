@@ -4,6 +4,7 @@
     import { onMount,onDestroy } from 'svelte';
     const electron = require("electron");
     const path = require("path");
+    let isAnythingChange=false;
     export let FileList = [];
     // Importing dialog module using remote
     const dialog = electron.remote.dialog;
@@ -11,13 +12,15 @@
     onMount(async () => {
         localforage.getItem('fileList').then(data => {
             if(data){
-                console.log("buraya girdi");
+                console.log("kayıt getirme başarılı");
                 FileList=data;
             }
         });
 	});
     onDestroy(() => {
+        if(isAnythingChange){
         localforage.setItem('fileList', FileList).then((x)=> console.log("kayıt başarılı"));
+        }
     });
     const addFileFunction = () => {
         // If the platform is 'win32' or 'Linux'
@@ -104,6 +107,7 @@
             }
         }
         FileList = [...FileList, ...files];
+        isAnythingChange=true;
     };
 
     document.addEventListener("drop", (event) => {
@@ -131,6 +135,7 @@
 
     const deleteFile = (path) => {
         FileList = FileList.filter((x) => x.path != path);
+        isAnythingChange=true;
     };
 </script>
 
