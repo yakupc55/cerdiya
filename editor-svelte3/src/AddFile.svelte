@@ -1,12 +1,24 @@
 <script>
     import Fa from "svelte-fa";
     import { faCircleMinus } from "@fortawesome/free-solid-svg-icons";
+    import { onMount,onDestroy } from 'svelte';
     const electron = require("electron");
     const path = require("path");
     export let FileList = [];
     // Importing dialog module using remote
     const dialog = electron.remote.dialog;
 
+    onMount(async () => {
+        localforage.getItem('fileList').then(data => {
+            if(data){
+                console.log("buraya girdi");
+                FileList=data;
+            }
+        });
+	});
+    onDestroy(() => {
+        localforage.setItem('fileList', FileList).then((x)=> console.log("kayıt başarılı"));
+    });
     const addFileFunction = () => {
         // If the platform is 'win32' or 'Linux'
         if (process.platform !== "darwin") {
