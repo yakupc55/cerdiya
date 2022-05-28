@@ -1,4 +1,5 @@
 <script>
+	import Datas from './Datas.svelte';
 	import FileStructure from './FileStructure.svelte';
 	import Home from './Home.svelte';
 	import AddFile from './AddFile.svelte';
@@ -39,7 +40,7 @@
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 	<script src="build/localforage.min.js"></script>
 </head>
-
+<Datas />
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 	<div to="/" class="navbar-brand" >Cerdiya</div>
 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,7 +49,7 @@
 	<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
 		<div class="navbar-nav">
 		{#each pages as {name,ccolor},i}
-		<li on:click={()=>changePage(i)} to="testPage" class="nav-item nav-link {ccolor}" >{name} </li>	
+		<a on:click={()=>changePage(i)} to="testPage" class="nav-item nav-link {ccolor}" >{name} </a>	
 		{/each}
 		</div>
 	</div>

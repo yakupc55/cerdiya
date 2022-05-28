@@ -1,11 +1,9 @@
 <script>
     import { onMount } from 'svelte';
     import { onDestroy } from 'svelte';    
-      
+    import TestModule,{ someValue } from './TestModule.svelte'  
     onMount(async () => {
 		console.log(document.location);
-		
-        
 	});
     onDestroy(() => {
         console.log("çalıştı");
@@ -20,6 +18,7 @@
     }
 
 </script>
-
+{someValue.name}
+<TestModule />
 <button on:click={getItem}> get item </button>
 <button on:click={setItem}> set item </button>

@@ -1,26 +1,20 @@
 <script>
     import Fa from "svelte-fa";
+    import {db} from "./Datas.svelte";
     import { faCircleMinus } from "@fortawesome/free-solid-svg-icons";
     import { onMount,onDestroy } from 'svelte';
     const electron = require("electron");
     const path = require("path");
     let isAnythingChange=false;
-    export let FileList = [];
+    
     // Importing dialog module using remote
     const dialog = electron.remote.dialog;
 
     onMount(async () => {
-        localforage.getItem('fileList').then(data => {
-            if(data){
-                console.log("kayıt getirme başarılı");
-                FileList=data;
-            }
-        });
+
 	});
     onDestroy(() => {
-        if(isAnythingChange){
-        localforage.setItem('fileList', FileList).then((x)=> console.log("kayıt başarılı"));
-        }
+        
     });
     const addFileFunction = () => {
         // If the platform is 'win32' or 'Linux'
@@ -94,7 +88,7 @@
         let files = [];
         for (const f of addFiles) {
             let exist = false;
-            for (const item of FileList) {
+            for (const item of db.FileList) {
                 if (item.path === f.path) {
                     exist = true;
                     break;
@@ -106,7 +100,7 @@
                 files = [...files, { path: f.path, name: f.name }];
             }
         }
-        FileList = [...FileList, ...files];
+        db.FileList = [...db.FileList, ...files];
         isAnythingChange=true;
     };
 
@@ -134,13 +128,13 @@
     });
 
     const deleteFile = (path) => {
-        FileList = FileList.filter((x) => x.path != path);
+        db.FileList = db.FileList.filter((x) => x.path != path);
         isAnythingChange=true;
     };
 </script>
 
 <button on:click={addFileFunction}>Upload File</button>
-{#if FileList.length > 0}
+{#if db.FileList.length > 0}
     <table class="table table-striped table-dark">
         <thead>
             <tr>
@@ -151,7 +145,7 @@
             </tr>
         </thead>
         <tbody>
-            {#each FileList as item, index}
+            {#each db.FileList as item, index}
                 <!-- <h4>{index}. {item.name} <span on:click={deleteFile(item.path)}><Fa icon={faCircleMinus} color="red" /></span></h4> -->
                 <tr>
                     <th scope="row">{index}</th>
