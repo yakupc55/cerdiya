@@ -10,7 +10,7 @@
     }
     
     export const saveFileListToFromLocalforage = ()=>{
-        localforage.setItem('fileList', FileList).then((x)=> console.log("kayıt başarılı"));
+        localforage.setItem('fileList', db.FileList).then((x)=> console.log("kayıt başarılı"));
     } 
 </script>
 <script>
@@ -19,7 +19,6 @@
         setTimeout(() => {
             getFileListFromLocalforage();
         }, 100);
-		
 	});
 	onDestroy(() => {
 		saveFileListToFromLocalforage();

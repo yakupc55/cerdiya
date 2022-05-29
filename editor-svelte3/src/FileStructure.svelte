@@ -1,22 +1,27 @@
 <script>
-    import { onMount,onDestroy } from 'svelte';
-    import { someValue } from './TestModule.svelte'  
-    export let FileList = [];
-    let isAnythingChange=false;
+    import { onMount, onDestroy } from "svelte";
+    import { someValue } from "./TestModule.svelte";
+    import { db, saveFileListToFromLocalforage } from "./Datas.svelte";
+    let selectedFile=0;
     onMount(async () => {
-        localforage.getItem('fileList').then(data => {
-            if(data){
-                console.log("kayıt getirme başarılı");
-                FileList=data;
-            }
-        });
-	});
-    onDestroy(() => {
-        if(isAnythingChange){
-        localforage.setItem('fileList', FileList).then((x)=> console.log("kayıt başarılı"));
-        }
+       // console.log(db);
     });
 </script>
-{someValue.name}
-<h1>Structure page</h1>
-    
+
+<div class="row">
+    <div class="col-3"> 
+        <select
+            class="form-select"
+            size="20"
+            bind:value={selectedFile}
+            aria-label="multiple select example">
+            {#each db.FileList as item, index}
+            <option value={index}>{item.name}</option>
+            {/each}
+        </select>
+    </div>
+    <div class="col-6">
+    <h1>{db.FileList[selectedFile].name}</h1>{db.FileList[selectedFile].path}
+    </div>
+</div>
+

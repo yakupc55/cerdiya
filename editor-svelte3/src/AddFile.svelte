@@ -1,11 +1,11 @@
 <script>
     import Fa from "svelte-fa";
-    import {db} from "./Datas.svelte";
+    import {db,saveFileListToFromLocalforage} from "./Datas.svelte";
     import { faCircleMinus } from "@fortawesome/free-solid-svg-icons";
     import { onMount,onDestroy } from 'svelte';
     const electron = require("electron");
     const path = require("path");
-    let isAnythingChange=false;
+    
     
     // Importing dialog module using remote
     const dialog = electron.remote.dialog;
@@ -101,7 +101,7 @@
             }
         }
         db.FileList = [...db.FileList, ...files];
-        isAnythingChange=true;
+        saveFileListToFromLocalforage();
     };
 
     document.addEventListener("drop", (event) => {
@@ -129,7 +129,7 @@
 
     const deleteFile = (path) => {
         db.FileList = db.FileList.filter((x) => x.path != path);
-        isAnythingChange=true;
+        saveFileListToFromLocalforage();
     };
 </script>
 
