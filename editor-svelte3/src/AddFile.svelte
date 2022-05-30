@@ -1,14 +1,12 @@
 <script>
+	import UploadFile from './tools/UploadFile.svelte';
     import Fa from "svelte-fa";
-    import {db,saveFileListToFromLocalforage} from "./Datas.svelte";
+    import {db,saveFileListToFromLocalforage} from './Datas/Datas.svelte';
     import { faCircleMinus } from "@fortawesome/free-solid-svg-icons";
     import { onMount,onDestroy } from 'svelte';
+    import { addFilesToList,deleteFile } from "./Datas/fileOperations.svelte";
+    
     const electron = require("electron");
-    const path = require("path");
-    
-    
-    // Importing dialog module using remote
-    const dialog = electron.remote.dialog;
 
     onMount(async () => {
 
@@ -16,93 +14,9 @@
     onDestroy(() => {
         
     });
-    const addFileFunction = () => {
-        // If the platform is 'win32' or 'Linux'
-        if (process.platform !== "darwin") {
-            // Resolves to a Promise<Object>
-            dialog
-                .showOpenDialog({
-                    title: "Select the File to be uploaded",
-                    defaultPath: path.join(__dirname, "../assets/"),
-                    buttonLabel: "Upload",
-                    // Restricting the user to only Text Files.
-                    filters: [
-                        {
-                            name: "Text Files",
-                            extensions: ["txt", "docx"],
-                        },
-                    ],
-                    // Specifying the File Selector Property
-                    properties: ["openFile"],
-                })
-                .then((file) => {
-                    // Stating whether dialog operation was
-                    // cancelled or not.
-                    //console.log(file.canceled);
-                    if (!file.canceled) {
-                        // Updating the GLOBAL filepath variable
-                        // to user-selected file.
-                        // console.log(global);
-                         global.filepath = file.filePaths[0].toString();
-                        // console.log(path.basename(global.filepath));
-                        // console.log(global.filepath);
-                        addFilesToList([{name:path.basename(global.filepath),path:global.filepath}])
-                    }
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
-        } else {
-            // If the platform is 'darwin' (macOS)
-            dialog
-                .showOpenDialog({
-                    title: "Select the File to be uploaded",
-                    defaultPath: path.join(__dirname, "../assets/"),
-                    buttonLabel: "Upload",
-                    filters: [
-                        {
-                            name: "Text Files",
-                            extensions: ["txt", "docx"],
-                        },
-                    ],
-                    // Specifying the File Selector and Directory
-                    // Selector Property In macOS
-                    properties: ["openFile", "openDirectory"],
-                })
-                .then((file) => {
-                    // console.log(file.canceled);
-                    if (!file.canceled) {
-                        global.filepath = file.filePaths[0].toString();
-                        // console.log(global.filepath);
-                        addFilesToList([{name:path.basename(global.filepath),path:global.filepath}])
-                    }
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
-        }
-    };
-    var uploadFile = document.getElementById("upload");
 
-    let addFilesToList = (addFiles) => {
-        let files = [];
-        for (const f of addFiles) {
-            let exist = false;
-            for (const item of db.FileList) {
-                if (item.path === f.path) {
-                    exist = true;
-                    break;
-                }
-            }
-            if (exist) {
-                alert("this file is exist.\n" + f.path);
-            } else {
-                files = [...files, { path: f.path, name: f.name }];
-            }
-        }
-        db.FileList = [...db.FileList, ...files];
-        saveFileListToFromLocalforage();
-    };
+    const _deleteFile = (index) =>{db.FileList=deleteFile(index)};
+    var uploadFile = document.getElementById("upload");
 
     document.addEventListener("drop", (event) => {
         let files = [];
@@ -111,7 +25,7 @@
         for (const f of event.dataTransfer.files) {
             files.push({ name: f.name, path: f.path });
         }
-        addFilesToList(files);
+       db.FileList = addFilesToList(files);
     });
 
     document.addEventListener("dragover", (e) => {
@@ -126,14 +40,9 @@
     document.addEventListener("dragleave", (event) => {
         console.log("File has left the Drop Space");
     });
-
-    const deleteFile = (path) => {
-        db.FileList = db.FileList.filter((x) => x.path != path);
-        saveFileListToFromLocalforage();
-    };
+   const uploadFileEvent= (event)=>{ db.FileList = addFilesToList([{name:event.detail.name,path:event.detail.path}]);};
 </script>
-
-<button on:click={addFileFunction}>Upload File</button>
+<UploadFile on:uploadFileEvent={uploadFileEvent} />
 {#if db.FileList.length > 0}
     <table class="table table-striped table-dark">
         <thead>
@@ -152,7 +61,7 @@
                     <td>{item.name}</td>
                     <td>{item.path}</td>
                     <td
-                        ><span on:click={deleteFile(item.path)}
+                        ><span on:click={_deleteFile(item.path)}
                             ><Fa icon={faCircleMinus} color="red" /></span
                         ></td
                     >

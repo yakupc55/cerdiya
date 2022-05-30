@@ -1,5 +1,5 @@
 <script>
-	import Datas from './Datas.svelte';
+	import Datas from './Datas/Datas.svelte';
 	import FileStructure from './FileStructure.svelte';
 	import Home from './Home.svelte';
 	import AddFile from './AddFile.svelte';

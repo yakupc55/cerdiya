@@ -18,6 +18,7 @@
     onMount( () => {
         setTimeout(() => {
             getFileListFromLocalforage();
+            
         }, 100);
 	});
 	onDestroy(() => {
