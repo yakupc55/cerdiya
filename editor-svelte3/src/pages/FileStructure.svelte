@@ -25,6 +25,17 @@
         hovering = null;
     };
     let updateIndex=-1;
+
+    const _openUpdateMode = (value)=> {updateIndex=value}
+    const cmodes = {
+        openUpdateMode:_openUpdateMode
+    }
+
+    const connectionWithChilds = (data)=>{
+        data=data.detail;
+       // console.log(data);
+        cmodes[data.mode](data.value);
+    }
 </script>
 {#if db.FileList.length>0}
 <div class="row m-0 p-0">
@@ -63,12 +74,12 @@
                 class:is-active={hovering === index}
              class="card">
              <span>{index}</span>
-                <StructureItem {...item} mode={(updateIndex==index)?"update":"show"}/>
+                <StructureItem on:connection={connectionWithChilds} index={index} {...item} mode={(updateIndex==index)?"update":"show"}/>
             </div>
         {/each}
         {:else}
             <div class="card">
-                <StructureItem type="code" value="test2" mode="show"/>
+                <StructureItem on:connection={connectionWithChilds} index=-1 type="code" value="test2" mode="show"/>
             </div>
         {/if}
         
