@@ -42,4 +42,4 @@
    const uploadFileEvent= (event)=>{ db.FileList = addFilesToList([{name:event.detail.name,path:event.detail.path}]);};
 </script>
 <UploadFile on:uploadFileEvent={uploadFileEvent} />
-<FileListTable on:connection={connectionWithChilds} db={db}/>
+<FileListTable on:connection={connectionWithChilds} FileList={db.FileList}/>
