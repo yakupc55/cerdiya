@@ -1,7 +1,7 @@
 <script>
     import { onMount, onDestroy } from "svelte";
-    import { someValue } from "./TestModule.svelte";
-    import { db, saveFileListToFromLocalforage } from "./Datas/Datas.svelte";
+    import { someValue } from "./../TestModule.svelte";
+    import { db, saveFileListToFromLocalforage } from "./../Datas/Datas.svelte";
     let selectedFile=0;
     onMount(async () => {
        // console.log(db);

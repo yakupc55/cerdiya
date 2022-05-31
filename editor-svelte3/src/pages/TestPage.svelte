@@ -1,6 +1,6 @@
 <script>
     import {flip} from 'svelte/animate';
-    import { db, saveFileListToFromLocalforage } from "./Datas/Datas.svelte";
+    import { db, saveFileListToFromLocalforage } from "../Datas/Datas.svelte";
     
     let hovering = false;
   
