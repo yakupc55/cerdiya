@@ -6,7 +6,7 @@
     import {_dragstartList,_dropList} from '../Datas/dragDropList.svelte';
     import { db, saveFileListToFromLocalforage } from "./../Datas/Datas.svelte";
     let selectedFile=0;
-
+    let idCount=4;
     onMount(async () => {
        // console.log(db);
     });
@@ -14,10 +14,10 @@
       let hovering = false;
     const options = {duration:300};
     let testList = [
-        {type:"code",value:"test1"},
-        {type:"point",value:"point1"},
-        {type:"point",value:"point2"},
-        {type:"point",value:"point3"},
+        {type:"code",value:"test1" ,id:0},
+        {type:"point",value:"point1",id:1},
+        {type:"point",value:"point2",id:2},
+        {type:"point",value:"point3",id:3},
     ];
   //  let testlist = testList2;
     const dropList= (event, target)=>{
@@ -26,9 +26,11 @@
     };
     let updateIndex=-1;
 
-    const _openUpdateMode = (value)=> {updateIndex=value}
+    const _openUpdateMode = (value)=> {updateIndex=value};
+    const _deleteStructure = (id) => {testList = testList.filter((x) => x.id != id)}
     const cmodes = {
-        openUpdateMode:_openUpdateMode
+        openUpdateMode:_openUpdateMode,
+        deleteStructure:_deleteStructure
     }
 
     const connectionWithChilds = (data)=>{
@@ -73,7 +75,6 @@
                 on:dragenter={() => hovering = index}
                 class:is-active={hovering === index}
              class="card">
-             <span>{index}</span>
                 <StructureItem on:connection={connectionWithChilds} index={index} {...item} mode={(updateIndex==index)?"update":"show"}/>
             </div>
         {/each}
