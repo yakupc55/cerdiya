@@ -21,7 +21,7 @@
         </select>
     </div>
     <div class="col-6">
-    <h1>{db.FileList[selectedFile].name}</h1>{db.FileList[selectedFile].path}
+    <h1>{db.FileList[selectedFile].name.substring(0,35)}</h1>{db.FileList[selectedFile].path.substring(0,90)}
     </div>
 </div>
 
