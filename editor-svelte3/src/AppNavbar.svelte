@@ -4,7 +4,7 @@
 	import AddFile from './pages/AddFile.svelte';
     import TestPage from './pages/TestPage.svelte';
     import {st} from "./Datas/stores";
-    
+
     const ccolor="bg-secondary active";
 	let currentPageComponent=Home;
 
@@ -28,7 +28,7 @@
 	}
 </script>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand navbar-dark bg-dark">
 	<div to="/" class="navbar-brand" >Cerdiya</div>
 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
 		<span class="navbar-toggler-icon"></span>
