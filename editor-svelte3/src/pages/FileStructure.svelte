@@ -26,18 +26,21 @@
     };
     let updateIndex=-1;
 </script>
-
+{#if db.FileList.length>0}
 <div class="row m-0 p-0">
-    <div class="col-3 bg-secondary"> 
+    <div class="col-3 bg-secondary">
+      
         <select
-            class="form-select w-100"
-            size="20"
-            bind:value={selectedFile}
-            aria-label="multiple select example">
-            {#each db.FileList as item, index}
-            <option value={index}>{item.name}</option>
-            {/each}
-        </select>
+        class="form-select w-100"
+        size="20"
+        bind:value={selectedFile}
+        aria-label="multiple select example">
+        {#each db.FileList as item, index}
+        <option value={index}>{item.name}</option>
+        {/each}
+    </select>
+       
+       
     </div>
     <div class="col-9 center bg-secondary">
         <div class="row bg-dark p-0 m-0 text-white">
@@ -48,7 +51,7 @@
                 Path :{db.FileList[selectedFile].path.substring(0,70)}
             </div>
         </div>
-        {#if testList.length>0}
+        {#if testList && testList.length>0}
         {#each testList as item,index(item.value)}
             <div
             animate:flip={options}
@@ -71,4 +74,7 @@
         
     </div>
 </div>
+{:else}
+<h1>Firstly add files please</h1>
+{/if} 
 
