@@ -21,16 +21,30 @@
     ];
   //  let testlist = testList2;
     const dropList= (event, target)=>{
-        testList = _dropList(event, target,testList,()=>{console.log("çalıştı")});
+        testList = _dropList(event, target,testList,()=>{});
         hovering = null;
     };
     let updateIndex=-1;
 
     const _openUpdateMode = (value)=> {updateIndex=value};
     const _deleteStructure = (id) => {testList = testList.filter((x) => x.id != id)}
+    const _openNewStructure = () => {
+       testList= [...testList,{type:"code",value:"",id:idCount}];
+       updateIndex = idCount;
+        idCount++;
+    }
+    const _saveStructure = (id) => {
+       updateIndex=-1;
+    }
+    const _cancelStructure = (id) => {
+        updateIndex=-1;
+    }
     const cmodes = {
         openUpdateMode:_openUpdateMode,
-        deleteStructure:_deleteStructure
+        deleteStructure:_deleteStructure,
+        saveStructure:_saveStructure,
+        openNewStructure:_openNewStructure,
+        cancelStructure: _cancelStructure
     }
 
     const connectionWithChilds = (data)=>{
@@ -65,7 +79,7 @@
             </div>
         </div>
         {#if testList && testList.length>0}
-        {#each testList as item,index(item.value)}
+        {#each testList as item,index(item.id)}
             <div
             animate:flip={options}
                 draggable={true} 
@@ -75,7 +89,7 @@
                 on:dragenter={() => hovering = index}
                 class:is-active={hovering === index}
              class="card">
-                <StructureItem on:connection={connectionWithChilds} index={index} {...item} mode={(updateIndex==index)?"update":"show"}/>
+                <StructureItem on:connection={connectionWithChilds} index={index} {...item} mode={(updateIndex==item.id)?"update":"show"}/>
             </div>
         {/each}
         {:else}

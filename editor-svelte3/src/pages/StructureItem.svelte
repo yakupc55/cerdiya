@@ -4,16 +4,35 @@
     export let value;
     export let mode;
     export let index;
+
     import { createEventDispatcher } from 'svelte';
     const dispatch = createEventDispatcher();
     const _openUpdateMode = () =>{
         dispatch('connection', {
-                            mode:"openUpdateMode",value:index
+                            mode:"openUpdateMode",value:id
                         });  
     };
     const _deleteStructure = () =>{
         dispatch('connection', {
                             mode:"deleteStructure",value:id
+                        });  
+    };
+
+    const _saveStructure = () =>{
+        dispatch('connection', {
+                            mode:"saveStructure",value:id
+                        });  
+    };
+
+    const _openNewStructure = () =>{
+        dispatch('connection', {
+                            mode:"openNewStructure",value:index
+                        });  
+    };
+
+    const _cancelStructure = () =>{
+        dispatch('connection', {
+                            mode:"cancelStructure",value:id
                         });  
     };
 </script>
@@ -32,9 +51,18 @@
     <div class="col-4">
         <button on:click={_openUpdateMode} class="button btn-primary">Edit</button>
         <button on:click={_deleteStructure} class="button btn-danger">delete</button>
+        <button on:click={_openNewStructure} class="button btn-success">New up</button>
+        <button on:click={_openNewStructure} class="button btn-success">New Down</button>
     </div>
 </div>
 {:else}
+<div class="row">
+    <div class="col-8">
 <span>düzenleme modundasınız</span>
-
+    </div>
+    <div class="col-4">
+        <button on:click={_saveStructure} class="button btn-primary">Save</button>
+        <button on:click={_cancelStructure} class="button btn-primary">Cancel</button>
+    </div>
+</div>
 {/if}
