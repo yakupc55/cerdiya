@@ -7,18 +7,21 @@
     import { db, saveFileListToFromLocalforage } from "./../Datas/Datas.svelte";
     let selectedFile=0;
     let idCount=4;
-    onMount(async () => {
-       // console.log(db);
-    });
+   
       //for drag drop list system
       let hovering = false;
     const options = {duration:300};
     let testList = [
-        {isCode:true,value:"test1" ,id:0},
-        {isCode:false,value:"point1",id:1},
-        {isCode:false,value:"point2",id:2},
-        {isCode:false,value:"point3",id:3},
+        // {isCode:true,value:"test1" ,id:0},
+        // {isCode:false,value:"point1",id:1},
+        // {isCode:false,value:"point2",id:2},
+        // {isCode:false,value:"point3",id:3},
     ];
+    onMount(async () => {
+    //    if(testList.length==0){
+    //        isNew=true;
+    //    }
+    });
   //  let testlist = testList2;
     const dropList= (event, target)=>{
         testList = _dropList(event, target,testList,()=>{});
@@ -44,9 +47,14 @@
         idCount++;
     }
     const _saveStructure = (data) => {
-       testList[updateIndex].isCode=data.isCode;
-       testList[updateIndex].value=data.value;
-       updateIndex=-1;
+        if(testList.length > 0){
+            testList[data.index].isCode=data.isCode;
+            testList[data.index].value=data.value;
+            updateIndex=-1;
+        }else{
+            testList=[{isCode:data.isCode,value:data.value,id:idCount}];
+            idCount++;
+        }
     }
     const _cancelStructure = (id) => {
         if(isNew){
@@ -114,7 +122,7 @@
         {/each}
         {:else}
             <div class="card">
-                <StructureItem on:connection={connectionWithChilds} index=-1 type="code" value="test2" mode="show"/>
+                <StructureItem on:connection={connectionWithChilds} index=0 id={idCount} isCode={false} value="save your first point" mode="edit"/>
             </div>
         {/if}
         

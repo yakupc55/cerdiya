@@ -25,7 +25,7 @@
 
     const _saveStructure = () =>{
         dispatch('connection', {
-                            mode:"saveStructure",value:{value:_value,isCode:_isCode}
+                            mode:"saveStructure",value:{value:_value,isCode:_isCode,index:index}
                         });  
     };
 
