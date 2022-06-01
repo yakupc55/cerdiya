@@ -28,9 +28,12 @@
 
     const _openUpdateMode = (value)=> {updateIndex=value};
     const _deleteStructure = (id) => {testList = testList.filter((x) => x.id != id)}
-    const _openNewStructure = () => {
-       testList= [...testList,{type:"code",value:"",id:idCount}];
-       updateIndex = idCount;
+    const _openNewStructure = (index) => {
+        index = (index >=0) ? index : 0;
+        console.log(index);
+        testList.splice(index,0,{type:"code",value:"",id:idCount});
+        testList=testList;
+        updateIndex = idCount;
         idCount++;
     }
     const _saveStructure = (id) => {

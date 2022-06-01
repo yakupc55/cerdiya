@@ -24,9 +24,9 @@
                         });  
     };
 
-    const _openNewStructure = () =>{
+    const _openNewStructure = (sendIndex) =>{
         dispatch('connection', {
-                            mode:"openNewStructure",value:index
+                            mode:"openNewStructure",value:sendIndex
                         });  
     };
 
@@ -51,8 +51,8 @@
     <div class="col-4">
         <button on:click={_openUpdateMode} class="button btn-primary">Edit</button>
         <button on:click={_deleteStructure} class="button btn-danger">delete</button>
-        <button on:click={_openNewStructure} class="button btn-success">New up</button>
-        <button on:click={_openNewStructure} class="button btn-success">New Down</button>
+        <button on:click={_openNewStructure(index)} class="button btn-success">New up</button>
+        <button on:click={_openNewStructure(index+1)} class="button btn-success">New Down</button>
     </div>
 </div>
 {:else}
