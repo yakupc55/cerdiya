@@ -1,10 +1,10 @@
 <script>
+	import Situations from './pages/Situations.svelte';
     import FileStructure from './pages/FileStructure.svelte';
 	import Home from './pages/Home.svelte';
 	import AddFile from './pages/AddFile.svelte';
     import TestPage from './pages/TestPage.svelte';
     import {st} from "./Datas/stores";
-
     const ccolor="bg-secondary active";
 	let currentPageComponent=Home;
 
@@ -12,6 +12,7 @@
 			{name:"Home", component:Home, active:true,ccolor:ccolor},
 			{name:"Add files", component:AddFile, active:false,ccolor:""},
 			{name:"File structure", component:FileStructure,active:false,ccolor:""},
+			{name:"Situations", component:Situations,active:false,ccolor:""},
 			{name:"Test page", component:TestPage,active:false,ccolor:""}
 		];
     const changePage= (index)=>{
