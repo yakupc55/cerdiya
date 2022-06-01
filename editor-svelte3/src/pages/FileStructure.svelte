@@ -26,7 +26,7 @@
     });
   //  let testlist = testList2;
     const dropList= (event, target)=>{
-        testList = _dropList(event, target,testList,()=>{});
+        db.FileList[selectedFile].Structure = _dropList(event, target,db.FileList[selectedFile].Structure,()=>{});
         hovering = null;
     };
     let updateIndex=-1;

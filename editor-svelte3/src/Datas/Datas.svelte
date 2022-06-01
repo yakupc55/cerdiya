@@ -1,6 +1,6 @@
 <script context="module">
 	import Situations from './../pages/Situations.svelte';
-    export const db = {FileList:[],Situations:[]};
+    export const db = {FileList:[],Situations:[],stCount:0};
     export const getFileListFromLocalforage = ()=>{
         localforage.getItem('fileList').then(data => {
             if(data){
