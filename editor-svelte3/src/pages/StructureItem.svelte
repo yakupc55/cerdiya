@@ -1,4 +1,6 @@
 <script>
+    import { faCircleMinus,faCirclePlus,faCircleUp,faCircleDown,faPenToSquare,faSave,faCancel } from "@fortawesome/free-solid-svg-icons";
+    import Fa from "svelte-fa";
     export let type;
     export let id;
     export let value;
@@ -49,10 +51,10 @@
         {/if}
     </div>
     <div class="col-4">
-        <button on:click={_openUpdateMode} class="button btn-primary">Edit</button>
-        <button on:click={_deleteStructure} class="button btn-danger">delete</button>
-        <button on:click={_openNewStructure(index)} class="button btn-success">New up</button>
-        <button on:click={_openNewStructure(index+1)} class="button btn-success">New Down</button>
+        <button on:click={_openUpdateMode} class="button btn-primary"><Fa icon={faPenToSquare} color="white" /></button>
+        <button on:click={_deleteStructure} class="button btn-danger"><Fa icon={faCircleMinus} color="white" /></button>
+        <button on:click={_openNewStructure(index)} class="button btn-success"><Fa icon={faCirclePlus} size="1.2x" color="white" /><Fa icon={faCircleUp} color="black" /></button>
+        <button on:click={_openNewStructure(index+1)} class="button btn-success"><Fa icon={faCirclePlus} size="1.2x" color="white" /><Fa icon={faCircleDown} color="black" /></button>
     </div>
 </div>
 {:else}
@@ -61,8 +63,8 @@
 <span>düzenleme modundasınız</span>
     </div>
     <div class="col-4">
-        <button on:click={_saveStructure} class="button btn-primary">Save</button>
-        <button on:click={_cancelStructure} class="button btn-primary">Cancel</button>
+        <button on:click={_saveStructure} class="button btn-primary"><Fa icon={faSave} color="white" /></button>
+        <button on:click={_cancelStructure} class="button btn-danger"><Fa icon={faCancel} color="white" /></button>
     </div>
 </div>
 {/if}
