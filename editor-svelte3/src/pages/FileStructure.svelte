@@ -14,10 +14,10 @@
       let hovering = false;
     const options = {duration:300};
     let testList = [
-        {type:"code",value:"test1" ,id:0},
-        {type:"point",value:"point1",id:1},
-        {type:"point",value:"point2",id:2},
-        {type:"point",value:"point3",id:3},
+        {isCode:true,value:"test1" ,id:0},
+        {isCode:false,value:"point1",id:1},
+        {isCode:false,value:"point2",id:2},
+        {isCode:false,value:"point3",id:3},
     ];
   //  let testlist = testList2;
     const dropList= (event, target)=>{
@@ -25,22 +25,39 @@
         hovering = null;
     };
     let updateIndex=-1;
-
-    const _openUpdateMode = (value)=> {updateIndex=value};
+    let isNew=false;
+    
+    const _openUpdateMode = (value)=> {
+        updateNewControl();
+        isNew=false;
+        updateIndex=value 
+    };
     const _deleteStructure = (id) => {testList = testList.filter((x) => x.id != id)}
     const _openNewStructure = (index) => {
+        updateNewControl();
+        isNew=true;
         index = (index >=0) ? index : 0;
         console.log(index);
-        testList.splice(index,0,{type:"code",value:"",id:idCount});
+        testList.splice(index,0,{isCode:false,value:"",id:idCount});
         testList=testList;
         updateIndex = idCount;
         idCount++;
     }
-    const _saveStructure = (id) => {
+    const _saveStructure = (data) => {
+       testList[updateIndex].isCode=data.isCode;
+       testList[updateIndex].value=data.value;
        updateIndex=-1;
     }
     const _cancelStructure = (id) => {
+        if(isNew){
+           _deleteStructure(updateIndex);
+        }
         updateIndex=-1;
+    }
+    const updateNewControl=()=>{
+        if(isNew && updateIndex>=0){
+           _deleteStructure(updateIndex);
+        }
     }
     const cmodes = {
         openUpdateMode:_openUpdateMode,
@@ -91,7 +108,7 @@
                 ondragover="return false"
                 on:dragenter={() => hovering = index}
                 class:is-active={hovering === index}
-             class="card">
+             class="card m-0 p-0 mt-1">
                 <StructureItem on:connection={connectionWithChilds} index={index} {...item} mode={(updateIndex==item.id)?"update":"show"}/>
             </div>
         {/each}

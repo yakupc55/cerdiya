@@ -1,9 +1,12 @@
 <script>
+	import Switch from './../uiComponent/Switch.svelte';
     import { faCircleMinus,faCirclePlus,faCircleUp,faCircleDown,faPenToSquare,faSave,faCancel } from "@fortawesome/free-solid-svg-icons";
     import Fa from "svelte-fa";
-    export let type;
+    export let isCode;
+    let _isCode;
     export let id;
     export let value;
+    let _value=value;
     export let mode;
     export let index;
 
@@ -22,7 +25,7 @@
 
     const _saveStructure = () =>{
         dispatch('connection', {
-                            mode:"saveStructure",value:id
+                            mode:"saveStructure",value:{value:_value,isCode:_isCode}
                         });  
     };
 
@@ -43,28 +46,46 @@
 {#if mode=="show"}
 <div class="row">
     <div class="col-8">
-        <span>şu an show modunda açtınız</span>
-        {#if type=="code"}
-            <span>tipi kod olan bir mekanizmayı açtınız {value}</span>  
+        {#if isCode}
+        <div class="card-header bg-success text-white m-0 p-0 mt-1">
+            <center>Code</center> 
+            <div class="card-body bg-white text-dark m-0 p-0 pt-1">
+                <span>{value}</span> 
+            </div>
+           
+            </div>
         {:else}
-            <span>tipi point olan bir mekanizmayı açtınız {value}</span> 
+        <div class="card-header bg-primary text-white m-0 p-0 mt-1">
+            <center>Point</center> 
+            <div class="card-body bg-white text-dark m-0 p-0 pt-1">
+                <span>{value}</span> 
+            </div>
+        </div>
         {/if}
     </div>
-    <div class="col-4">
-        <button on:click={_openUpdateMode} class="button btn-primary"><Fa icon={faPenToSquare} color="white" /></button>
-        <button on:click={_deleteStructure} class="button btn-danger"><Fa icon={faCircleMinus} color="white" /></button>
-        <button on:click={_openNewStructure(index)} class="button btn-success"><Fa icon={faCirclePlus} size="1.2x" color="white" /><Fa icon={faCircleUp} color="black" /></button>
-        <button on:click={_openNewStructure(index+1)} class="button btn-success"><Fa icon={faCirclePlus} size="1.2x" color="white" /><Fa icon={faCircleDown} color="black" /></button>
+    <div class="col-4 d-flex justify-content-center align-items-center ">
+            <button on:click={_openUpdateMode} class="button btn-primary"><Fa icon={faPenToSquare} color="white" /></button>
+            <button on:click={_deleteStructure} class="button btn-danger"><Fa icon={faCircleMinus} color="white" /></button>
+            <button on:click={_openNewStructure(index)} class="button btn-success"><Fa icon={faCirclePlus} size="1.2x" color="white" /><Fa icon={faCircleUp} color="black" /></button>
+            <button on:click={_openNewStructure(index+1)} class="button btn-success"><Fa icon={faCirclePlus} size="1.2x" color="white" /><Fa icon={faCircleDown} color="black" /></button>
     </div>
 </div>
 {:else}
-<div class="row">
-    <div class="col-8">
-<span>düzenleme modundasınız</span>
+<div class="row d-flex justify-content-center align-items-center">
+    <div class="col-9">
+        {#if isCode}
+        <textarea bind:value={_value}  style="width: 100%;"></textarea>
+        {:else}
+        <input bind:value={_value} style="width: 100%;" type="text">
+        {/if}
+        
     </div>
-    <div class="col-4">
-        <button on:click={_saveStructure} class="button btn-primary"><Fa icon={faSave} color="white" /></button>
-        <button on:click={_cancelStructure} class="button btn-danger"><Fa icon={faCancel} color="white" /></button>
+    <div class="col-2 d-flex justify-content-center align-items-center">
+            <Switch bind:checked={_isCode} names={{on:"Code",off:"Point"}}/>
+    </div>
+    <div class="col-1">
+        <button on:click={_saveStructure} class="button btn-primary m-0 p-1"><Fa icon={faSave} color="white" /></button>
+        <button on:click={_cancelStructure} class="button btn-danger m-0 p-1"><Fa icon={faCancel} color="white" /></button>
     </div>
 </div>
 {/if}
