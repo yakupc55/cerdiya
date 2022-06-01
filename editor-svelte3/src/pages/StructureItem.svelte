@@ -73,7 +73,7 @@
 {:else}
 <div class="row d-flex justify-content-center align-items-center">
     <div class="col-9">
-        {#if isCode}
+        {#if _isCode}
         <textarea bind:value={_value}  style="width: 100%;"></textarea>
         {:else}
         <input bind:value={_value} style="width: 100%;" type="text">
