@@ -1,4 +1,5 @@
 <script>
+	import Comments from './pages/Comments.svelte';
 	import Situations from './pages/Situations.svelte';
     import FileStructure from './pages/FileStructure.svelte';
 	import Home from './pages/Home.svelte';
@@ -13,6 +14,7 @@
 			{name:"Add files", component:AddFile, active:false,ccolor:""},
 			{name:"File structure", component:FileStructure,active:false,ccolor:""},
 			{name:"Situations", component:Situations,active:false,ccolor:""},
+			{name:"Comments", component:Comments,active:false,ccolor:""},
 			{name:"Test page", component:TestPage,active:false,ccolor:""}
 		];
     const changePage= (index)=>{

@@ -81,6 +81,7 @@
                     {#if updateIndex==situation.id}
                         <input bind:value={_tempValue} style="width: 100%;" type="text">
                     {:else}
+                        <input type=checkbox bind:checked={situation.isActive}>
                         {situation.name}
                     {/if}
                 </div>
