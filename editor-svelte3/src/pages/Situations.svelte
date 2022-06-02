@@ -3,20 +3,22 @@
     import Fa from "svelte-fa";
     import {flip} from 'svelte/animate';
 	import Situations from './Situations.svelte';
-    import {db} from '../Datas/Datas.svelte';
+    import {db,saveSituationsToFromLocalforage} from '../Datas/Datas.svelte';
     import {_dragstartList,_dropList} from '../Datas/dragDropList.svelte';
 
     //for drag list
     let hovering = false;
     const options = {duration:300};
     const dropList= (event, target)=>{
-        db.Situations = _dropList(event, target,db.Situations,()=>{});
+        db.Situations = _dropList(event, target,db.Situations,saveSituationsToFromLocalforage);
         hovering = null;
     }
 
     let updateIndex=-1;
+    let lastNewIndex=0;
     let firstValue="save your fist value";
     let _tempValue="";
+    let isNew=false;
     const saveSituation =(index)=>{
         if(db.Situations.length==0){
             db.Situations = [{name:firstValue,isActive:false,id:db.stCount}];
@@ -27,11 +29,14 @@
             db.Situations[index].name=_tempValue;
             db.stCount++;
         }
+        saveSituationsToFromLocalforage();
     }
 
     const openUpdate=(index)=>{
+        updateNewControl(index);
         updateIndex=db.Situations[index].id;
         _tempValue=db.Situations[index].name;
+        isNew=false;
     }
 
     const cancelUpdate=()=>{
@@ -44,11 +49,19 @@
         firstValue="save your fist value";
     }
     const openNewSituation=(index)=>{
+        _tempValue="";
         db.Situations.splice(index,0,{name:"new situation",isActive:false,id:db.stCount});
         updateIndex=db.stCount;
         db.stCount++;
+        isNew=true;
+        lastNewIndex=index;
     }
 
+    const updateNewControl=()=>{
+        if(isNew && updateIndex>=0){
+           deleteStituation(lastNewIndex);
+        }
+    }
 </script>
 <div class="border border-secondary bg-dark mb-2">
 {#if db.Situations.length > 0}

@@ -22,7 +22,7 @@
             db.FileList[0].Structure = [];
             db.FileList[0].idCount = 0;
         }
-        console.log(db.FileList[0].Structure);
+        //console.log(db.FileList[0].Structure);
     });
   //  let testlist = testList2;
     const dropList= (event, target)=>{
