@@ -11,8 +11,9 @@ const bindEvents = [
     { name: "Home", dragSupport: false, sendParentSupport: false },
     { name: "Add files", dragSupport: true, subscribe: addFilesSubscribes, sendParentSupport: true },
     { name: "File structure", dragSupport: false, sendParentSupport: false },
-    { name: "Test page", dragSupport: false, sendParentSupport: false },
-    { name: "Situations", dragSupport: false, sendParentSupport: false }
+    { name: "Situations", dragSupport: false, sendParentSupport: false },
+    { name: "Comments", dragSupport: false, sendParentSupport: false },
+    { name: "Test page", dragSupport: false, sendParentSupport: false }
 ];
 dragDropFiles.subscribe(value => {
     // console.log("value : ");

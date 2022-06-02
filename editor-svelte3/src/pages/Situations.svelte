@@ -62,6 +62,11 @@
            deleteStituation(lastNewIndex);
         }
     }
+
+    const changeCheckbox=(index)=>{
+        db.Situations[index].isActive=!db.Situations[index].isActive;
+        saveSituationsToFromLocalforage();
+    }
 </script>
 <div class="border border-secondary bg-dark mb-2">
 {#if db.Situations.length > 0}
@@ -81,7 +86,7 @@
                     {#if updateIndex==situation.id}
                         <input bind:value={_tempValue} style="width: 100%;" type="text">
                     {:else}
-                        <input type=checkbox bind:checked={situation.isActive}>
+                        <input type=checkbox on:change={()=>changeCheckbox(index)} bind:checked={situation.isActive}>
                         {situation.name}
                     {/if}
                 </div>
