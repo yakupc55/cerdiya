@@ -16,7 +16,7 @@
         {comment: "test13",description:"test13",code:"code13",isActive:false,id:12},
         {comment: "test14",description:"test14",code:"code14",isActive:false,id:13}
     ]
-    export const db = {FileList:[],Situations:[],stCount:0,cmCount:0,Comments:testComments};
+    export const db = {FileList:[],Situations:[],stCount:0,cmCount:14,Comments:testComments};
     export const getFileListFromLocalforage = ()=>{
         localforage.getItem('fileList').then(data => {
             if(data){
