@@ -1,8 +1,19 @@
 <script>
     import { faCircleMinus,faCirclePlus,faCircleUp,faCircleDown,faPenToSquare,faSave,faCancel } from "@fortawesome/free-solid-svg-icons";
     import Fa from "svelte-fa";
+    import {flip} from 'svelte/animate';
 	import Situations from './Situations.svelte';
     import {db} from '../Datas/Datas.svelte';
+    import {_dragstartList,_dropList} from '../Datas/dragDropList.svelte';
+
+    //for drag list
+    let hovering = false;
+    const options = {duration:300};
+    const dropList= (event, target)=>{
+        db.Situations = _dropList(event, target,db.Situations,()=>{});
+        hovering = null;
+    }
+
     let updateIndex=-1;
     let firstValue="save your fist value";
     let _tempValue="";
@@ -32,11 +43,25 @@
         db.Situations= db.Situations;
         firstValue="save your fist value";
     }
+    const openNewSituation=(index)=>{
+        db.Situations.splice(index,0,{name:"new situation",isActive:false,id:db.stCount});
+        updateIndex=db.stCount;
+        db.stCount++;
+    }
+
 </script>
 <div class="border border-secondary bg-dark mb-2">
 {#if db.Situations.length > 0}
     {#each db.Situations as situation,index(situation.name)}
-    <div class="card mb-2">
+    <div
+    animate:flip={options}
+    draggable={true} 
+    on:dragstart={event => _dragstartList(event, index)}
+    on:drop|preventDefault={event => dropList(event, index)}
+    ondragover="return false"
+    on:dragenter={() => hovering = index}
+    class:is-active={hovering === index}
+     class="card mb-2">
         <div class="card-header bg-white text-dark m-0 p-0">
             <div class="row d-flex justify-content-center align-items-center">
                 <div class="col-10">
@@ -53,8 +78,8 @@
                     {:else}
                         <button on:click={()=>openUpdate(index)} class="button btn-primary"><Fa icon={faPenToSquare} color="white" /></button>
                         <button on:click={()=>deleteStituation(index)} class="button btn-danger"><Fa icon={faCircleMinus} color="white" /></button>
-                        <button class="button btn-success"><Fa icon={faCirclePlus} size="1.2x" color="white" /><Fa icon={faCircleUp} color="black" /></button>
-                        <button class="button btn-success"><Fa icon={faCirclePlus} size="1.2x" color="white" /><Fa icon={faCircleDown} color="black" /></button>
+                        <button on:click={()=>openNewSituation(index)} class="button btn-success"><Fa icon={faCirclePlus} size="1.2x" color="white" /><Fa icon={faCircleUp} color="black" /></button>
+                        <button on:click={()=>openNewSituation(index+1)} class="button btn-success"><Fa icon={faCirclePlus} size="1.2x" color="white" /><Fa icon={faCircleDown} color="black" /></button>
                     {/if}
                 </div>
             </div>
