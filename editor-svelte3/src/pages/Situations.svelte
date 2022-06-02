@@ -2,7 +2,6 @@
     import { faCircleMinus,faCirclePlus,faCircleUp,faCircleDown,faPenToSquare,faSave,faCancel } from "@fortawesome/free-solid-svg-icons";
     import Fa from "svelte-fa";
     import {flip} from 'svelte/animate';
-	import Situations from './Situations.svelte';
     import {db,saveSituationsToFromLocalforage} from '../Datas/Datas.svelte';
     import {_dragstartList,_dropList} from '../Datas/dragDropList.svelte';
 
