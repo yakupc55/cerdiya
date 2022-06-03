@@ -5,8 +5,16 @@
     import {_dragstartList,_dropList} from '../Datas/dragDropList.svelte';
     import { faCircleMinus,faCirclePlus,faCircleUp,faCircleDown,faPenToSquare,faSave,faCancel } from "@fortawesome/free-solid-svg-icons";
     import Fa from "svelte-fa";
+    import { onMount } from 'svelte';
+    onMount(async () => {
+		if(db.Comments.length==0){
+            db.Comments = [{comment: "test1",description:"test1",code:"code1",isActive:false,id:0}];
+            db.cmCount=1;
+        }
+	});
         //for drag list
         let hovering = false;
+        let changeId;
         const options = {duration:300};
         const dropList= (event, target)=>{
             db.Comments = _dropList(event, target,db.Comments,()=>{});
@@ -14,6 +22,7 @@
         }
         let selectedIndex=-1;
         const cancelSelected=()=>{
+            changeId(-1);
             selectedIndex=-1;
         }
         //a function find index of array by id
@@ -27,10 +36,13 @@
         }
         
         const deleteComment=()=>{
-            let index = findIndexById(selectedIndex);
+            if(db.Comments.length>1){let index = findIndexById(selectedIndex);
             db.Comments.splice(index,1);
             db.Comments= db.Comments;
             selectedIndex=-1;
+            }else{
+                alert("you cant't delete first comment");
+            }
         }
 
         const addComment=(add)=>{
@@ -64,7 +76,7 @@
                     <div
                     animate:flip={options}
                     draggable={true} 
-                    on:click={()=>{selectedIndex=comment.id}}
+                    on:click={()=>{selectedIndex=comment.id;changeId(index);}}
                     on:dragstart={event => _dragstartList(event, index)}
                     on:drop|preventDefault={event => dropList(event, index)}
                     ondragover="return false"
@@ -75,10 +87,11 @@
                         {comment.comment}    
                     </div>                
                 {/each}
+                <div style="height: 20px;"></div>
             </div>
         </div>
         <div class="col-6 bg-white">
-            <CommentDetail bind:id={selectedIndex} />
+            <CommentDetail bind:changeId={changeId} />
         </div>
     </div>
 </div>

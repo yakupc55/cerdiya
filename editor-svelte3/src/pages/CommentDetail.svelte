@@ -2,9 +2,15 @@
     import { fade, blur, fly, slide, scale } from "svelte/transition";
     import {flip} from 'svelte/animate';
     import { quintOut } from "svelte/easing";
-    export let id;
+    let id;
+    const changePageById = (_id) =>{
+        console.log(_id);
+        id = _id;
+    }
+    export const changeId = (_id)=> changePageById(_id);
     let selectedNavPage =0;
     let clickId=3;
+    
     const pageList = [{name:"Code",id:0,clickId:0},{name:"Information",id:1,clickId:1},{name:"Situations",id:2,clickId:2}];
     const options = {duration:400,y:30};
     const changeSelectedNavPage = (index) => {
@@ -12,8 +18,10 @@
    }
 </script>
 
+{#if id>=0}
 <div class="row bg-primary text-white" style="height:33px">
-    {#each pageList as page(page.clickId)}
+
+{#each pageList as page(page.clickId)}
     
         <div class="col-3">
             {#if page.id==selectedNavPage}
@@ -29,9 +37,9 @@
         </div>
     
     {/each}
+    
 </div>
 
-<h1>{id}</h1>
 {#if selectedNavPage==0}
 <h1>page 1</h1>
 {:else if selectedNavPage==1}
@@ -39,6 +47,10 @@
 {:else if selectedNavPage==2}
 <h1>page 3</h1>
 {/if}
+{:else}
+        <h1>Please select a comment</h1>
+{/if}
+
 
 <style>
     
