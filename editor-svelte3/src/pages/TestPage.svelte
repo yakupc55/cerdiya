@@ -1,47 +1,48 @@
 <script>
-    import {flip} from 'svelte/animate';
-    import { db, saveFileListToFromLocalforage } from "../Datas/Datas.svelte";
-    
-    let hovering = false;
+  import Select from 'svelte-select';
+  import { onMount } from 'svelte';
+  import {db} from '../Datas/Datas.svelte';
   
-    const drop = (event, target) => {
-      event.dataTransfer.dropEffect = 'move'; 
-      const start = parseInt(event.dataTransfer.getData("text/plain"));
-      const newTracklist = db.FileList;
+  let listIndex = -1;
+  $:tags_for_select = db.FileList.map(b => ({'label': b.name, 'value': b.path}));
+  $:list2 = getList();
+  onMount(async () => {
+     
+  });
+
+  let value = {value: 'cake', label: 'Cake'};
   
-      if (start < target) {
-        newTracklist.splice(target + 1, 0, newTracklist[start]);
-        newTracklist.splice(start, 1);
-      } else {
-        newTracklist.splice(target, 0, newTracklist[start]);
-        newTracklist.splice(start + 1, 1);
+  //a function find index of array by path in db.FileList
+  const findIndexByPath=(path)=>{
+      for(let i=0;i<db.FileList.length;i++){
+          if(db.FileList[i].path==path){
+              return i;
+          }
       }
-      db.FileList = newTracklist;
-      hovering = null;
-      saveFileListToFromLocalforage();
+  }
+
+  function handleSelect(event) {
+   let path= event.detail.value;
+   listIndex = findIndexByPath(path);
+   console.log(listIndex);
+   list2 = getList();
+  //  $list2=db.FileList[index].Structure.filter(b => b.isCode==false).map(b => ({'label': b.value, 'value': b.id}));
+    // .. do something here 🙂
+  }
+
+  function getList(){
+    if(listIndex>=0){
+      return db.FileList[listIndex].Structure.filter(b => b.isCode==false).map(b => ({'label': b.value, 'value': b.id}));
     }
-  
-    const dragstart = (event, i) => {
-      event.dataTransfer.effectAllowed = 'move';
-      event.dataTransfer.dropEffect = 'move';
-      const start = i;
-      event.dataTransfer.setData('text/plain', start);
+    else{
+      return [];
     }
-  
-  </script>
-  
-  <div class="list">
-    {#each db.FileList as n, index  (n.name)}
-      <div
-               class="list-item" 
-         animate:flip
-         draggable={true} 
-         on:dragstart={event => dragstart(event, index)}
-         on:drop|preventDefault={event => drop(event, index)}
-         ondragover="return false"
-         on:dragenter={() => hovering = index}
-         class:is-active={hovering === index}>
-         {n.name}	
-      </div>
-    {/each}
-  </div>
+  }
+</script>
+
+<Select
+items={tags_for_select}
+ on:select={handleSelect}></Select>
+<Select
+items={list2}
+></Select>

@@ -1,10 +1,30 @@
 <script>
     import { fade, blur, fly, slide, scale } from "svelte/transition";
+    import Select from 'svelte-select';
     import {flip} from 'svelte/animate';
     import { quintOut } from "svelte/easing";
     import {db,saveCommentsToFromLocalforage} from '../Datas/Datas.svelte';
     import {faSave } from "@fortawesome/free-solid-svg-icons";
     import Fa from "svelte-fa";
+    import { onMount } from 'svelte';
+
+    let pathItems = [];
+    onMount(async () => {
+		pathItems=[];
+        db.FileList.map(item => {
+            console.log(item);
+            pathItems.push({
+                value: item.path,
+                label: item.path
+            });
+        });
+        console.log(pathItems);
+        pathItems=pathItems;
+	});
+
+    function handleSelectPath(event) {
+    
+    }
 
     import { createEventDispatcher } from 'svelte';
     const dispatch = createEventDispatcher();
@@ -103,7 +123,7 @@
         <h4>Path :</h4>
     </div>
     <div class="col-10">
-        <input bind:value={cPath} style="width: 100%;" type="text">
+        <Select {pathItems} on:select={handleSelectPath}></Select>
     </div>
 </div>
 <div class="row  pb-1">
