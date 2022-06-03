@@ -3,12 +3,12 @@
     import {db,saveCommentsToFromLocalforage} from '../Datas/Datas.svelte';
     import {flip} from 'svelte/animate';
     import {_dragstartList,_dropList} from '../Datas/dragDropList.svelte';
-    import { faCircleMinus,faCirclePlus,faCircleUp,faCircleDown,faPenToSquare,faSave,faCancel } from "@fortawesome/free-solid-svg-icons";
+    import { faCircleMinus,faCirclePlus,faCircleUp,faCircleDown,faCancel } from "@fortawesome/free-solid-svg-icons";
     import Fa from "svelte-fa";
     import { onMount } from 'svelte';
     onMount(async () => {
 		if(db.Comments.length==0){
-            db.Comments = [{comment: "test1",description:"test1",code:"code1",isActive:false,id:0}];
+            db.Comments = [{comment: "test1",cPath:"",cPoint:0,description:"test1",code:"code1",isActive:false,id:0}];
             db.cmCount=1;
         }
 	});
@@ -50,6 +50,7 @@
             db.Comments.splice(index,0,{comment: "new comment",description:"new",code:"",isActive:false,id:db.cmCount});
             db.Comments= db.Comments;
             selectedIndex=db.cmCount;
+            changeId(db.cmCount);
             db.cmCount++;
         }
 </script>

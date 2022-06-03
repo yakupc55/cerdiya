@@ -2,11 +2,45 @@
     import { fade, blur, fly, slide, scale } from "svelte/transition";
     import {flip} from 'svelte/animate';
     import { quintOut } from "svelte/easing";
+    import {db} from '../Datas/Datas.svelte';
+    import {faSave } from "@fortawesome/free-solid-svg-icons";
+    import Fa from "svelte-fa";
+    let comment="";
+    let description="";
+    let cPath="";
+    let cPoint=0;
+    let code="";
+    let isActive=false;
+
     let id;
-    const changePageById = (_id) =>{
-        console.log(_id);
-        id = _id;
+    const saveComment=()=>{
+        
+        }
+    //a function find index of array by id
+    const findIndexById=(id)=>{
+        for(let i=0;i<db.Comments.length;i++){
+            if(db.Comments[i].id==id){
+                return i;
+            }
+        }
+        return -1;
     }
+
+    const changePageById = (_id) =>{
+        //console.log(_id);
+        id = _id;
+        if(id>-1){
+            let cm=db.Comments[findIndexById(id)];
+            console.log(cm);
+            comment=cm.comment;
+            description=cm.description;
+            cPath=cm.cPath;
+            cPoint=cm.cPoint;
+            code=cm.code;
+            isActive=cm.isActive;
+        }
+    }
+
     export const changeId = (_id)=> changePageById(_id);
     let selectedNavPage =0;
     let clickId=3;
@@ -19,7 +53,7 @@
 </script>
 
 {#if id>=0}
-<div class="row bg-primary text-white" style="height:33px">
+<div class="row bg-primary text-white" style="height:35px">
 
 {#each pageList as page(page.clickId)}
     
@@ -37,16 +71,39 @@
         </div>
     
     {/each}
-    
+    <div class="col-auto float-left p-0 m-0">
+        <button on:click={saveComment} class="button btn-primary m-0 p-1"><Fa icon={faSave} color="white" /></button> 
+    </div>
 </div>
 
 {#if selectedNavPage==0}
-<h1>page 1</h1>
+<h3>Code:</h3>
+<textarea bind:value={code} style="width: 100%; height:200px"></textarea>
+<div class="row pb-1">
+    <div class="col-2">
+        <h4>Path :</h4>
+    </div>
+    <div class="col-10">
+        <input bind:value={cPath} style="width: 100%;" type="text">
+    </div>
+</div>
+<div class="row">
+    <div class="col-2">
+        <h4>Point :</h4>
+    </div>
+    <div class="col-10">
+        <input bind:value={cPath} style="width: 100%;" type="text">
+    </div>
+</div>
 {:else if selectedNavPage==1}
-<h1>page 2</h1>
+<h3>Comment:</h3>
+<textarea bind:value={comment} style="width: 100%; height:120px"></textarea>
+<h3>Description:</h3>
+<textarea bind:value={description} style="width: 100%; height:240px"></textarea>
 {:else if selectedNavPage==2}
-<h1>page 3</h1>
+<h1>Situations Page</h1>
 {/if}
+
 {:else}
         <h1>Please select a comment</h1>
 {/if}
