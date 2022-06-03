@@ -1,4 +1,5 @@
 <script>
+	import CommentDetail from './CommentDetail.svelte';
     import {db,saveCommentsToFromLocalforage} from '../Datas/Datas.svelte';
     import {flip} from 'svelte/animate';
     import {_dragstartList,_dropList} from '../Datas/dragDropList.svelte';
@@ -40,50 +41,62 @@
             db.cmCount++;
         }
 </script>
-
-<div class="row p-0 m-0">
-    <div class="col-6 bg-primary" data-spy="scroll">
-        {#if selectedIndex>=0}
-        <center>
-            <div class="w-50 position-fixed">
-                <button on:click={deleteComment} class="button btn-danger"><Fa icon={faCircleMinus} color="white" /></button>
-                <button on:click={()=>addComment(0)} class="button btn-success"><Fa icon={faCirclePlus} size="1.2x" color="white" /><Fa icon={faCircleUp} color="black" /></button>
-                <button on:click={()=>addComment(1)} class="button btn-success"><Fa icon={faCirclePlus} size="1.2x" color="white" /><Fa icon={faCircleDown} color="black" /></button>
-                <button on:click={cancelSelected} class="button btn-dark"><Fa icon={faCancel} color="white" /></button>
+<div class="test">
+    <div class="row p-0 m-0">
+        <div class="col-6 bg-primary">
+            {#if selectedIndex>=0}
+            <center>
+                <div class="w-50 position-sticky" style="height:40px">
+                    <button on:click={deleteComment} class="button btn-danger"><Fa icon={faCircleMinus} color="white" /></button>
+                    <button on:click={()=>addComment(0)} class="button btn-success"><Fa icon={faCirclePlus} size="1.2x" color="white" /><Fa icon={faCircleUp} color="black" /></button>
+                    <button on:click={()=>addComment(1)} class="button btn-success"><Fa icon={faCirclePlus} size="1.2x" color="white" /><Fa icon={faCircleDown} color="black" /></button>
+                    <button on:click={cancelSelected} class="button btn-dark"><Fa icon={faCancel} color="white" /></button>
+                </div>
+            </center>
+            {:else}
+            <div class="w-50 position-sticky">
+                <div style="height:40px"></div>
             </div>
-        </center>
-        <div class="mt-5"></div>
-        {/if}
-    
-        <div class="row">
-            {#each db.Comments as comment,index(comment.id)}
-                <div
-                animate:flip={options}
-                draggable={true} 
-                on:click={()=>{selectedIndex=comment.id}}
-                on:dragstart={event => _dragstartList(event, index)}
-                on:drop|preventDefault={event => dropList(event, index)}
-                ondragover="return false"
-                on:dragenter={() => hovering = index}
-                class:selected={selectedIndex==comment.id}
-                class:is-active={hovering === index}
-                 class="card cm-card m-1 p-0">
-                    {comment.comment}    
-                </div>                
-            {/each}
+            {/if}
+        
+            <div class="row commentsArea">
+                {#each db.Comments as comment,index(comment.id)}
+                    <div
+                    animate:flip={options}
+                    draggable={true} 
+                    on:click={()=>{selectedIndex=comment.id}}
+                    on:dragstart={event => _dragstartList(event, index)}
+                    on:drop|preventDefault={event => dropList(event, index)}
+                    ondragover="return false"
+                    on:dragenter={() => hovering = index}
+                    class:selected={selectedIndex==comment.id}
+                    class:is-active={hovering === index}
+                    class="card cm-card m-1 p-0">
+                        {comment.comment}    
+                    </div>                
+                {/each}
+            </div>
+        </div>
+        <div class="col-6 bg-white">
+            <CommentDetail bind:id={selectedIndex} />
         </div>
     </div>
-    <div class="col-6 bg-success">
-        <h1>area 2</h1>
-    </div>
 </div>
-
 <style>
     .cm-card{
-        height: 175px;
-        width: 175px;
+        height: 170px;
+        width: 170px;
     }
     .selected{
         background-color: #ffc107;
+    }
+    .commentsArea{
+        overflow-y: scroll;
+        height: 520px;
+    }
+    .test{
+        height: 550px;
+        width: 100%;
+        overflow: hidden;
     }
 </style>

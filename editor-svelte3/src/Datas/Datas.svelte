@@ -12,9 +12,7 @@
         {comment: "test9",description:"test9",code:"code9",isActive:false,id:8},
         {comment: "test10",description:"test10",code:"code10",isActive:false,id:9},
         {comment: "test11",description:"test11",code:"code11",isActive:false,id:10},
-        {comment: "test12",description:"test12",code:"code12",isActive:false,id:11},
-        {comment: "test13",description:"test13",code:"code13",isActive:false,id:12},
-        {comment: "test14",description:"test14",code:"code14",isActive:false,id:13}
+        {comment: "test12",description:"test12",code:"code12",isActive:false,id:11}
     ]
     export const db = {FileList:[],Situations:[],stCount:0,cmCount:14,Comments:testComments};
     export const getFileListFromLocalforage = ()=>{
