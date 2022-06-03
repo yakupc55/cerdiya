@@ -2,9 +2,19 @@
     import { fade, blur, fly, slide, scale } from "svelte/transition";
     import {flip} from 'svelte/animate';
     import { quintOut } from "svelte/easing";
-    import {db} from '../Datas/Datas.svelte';
+    import {db,saveCommentsToFromLocalforage} from '../Datas/Datas.svelte';
     import {faSave } from "@fortawesome/free-solid-svg-icons";
     import Fa from "svelte-fa";
+
+    import { createEventDispatcher } from 'svelte';
+    const dispatch = createEventDispatcher();
+
+    const refresh = () => {
+        dispatch('connection', {
+                            mode:"refresh",value:{}
+                        });
+    };
+
     let comment="";
     let description="";
     let cPath="";
@@ -14,8 +24,16 @@
 
     let id;
     const saveComment=()=>{
-        
-        }
+        let index = findIndexById(id);
+        db.Comments[index].comment=comment;
+        db.Comments[index].description=description;
+        db.Comments[index].cPath=cPath;
+        db.Comments[index].cPoint=cPoint;
+        db.Comments[index].code=code;
+        db.Comments[index].isActive=isActive;
+        saveCommentsToFromLocalforage();
+        refresh();
+    }
     //a function find index of array by id
     const findIndexById=(id)=>{
         for(let i=0;i<db.Comments.length;i++){
@@ -31,7 +49,7 @@
         id = _id;
         if(id>-1){
             let cm=db.Comments[findIndexById(id)];
-            console.log(cm);
+            //console.log(cm);
             comment=cm.comment;
             description=cm.description;
             cPath=cm.cPath;
@@ -76,6 +94,7 @@
     </div>
 </div>
 
+
 {#if selectedNavPage==0}
 <h3>Code:</h3>
 <textarea bind:value={code} style="width: 100%; height:200px"></textarea>
@@ -87,7 +106,7 @@
         <input bind:value={cPath} style="width: 100%;" type="text">
     </div>
 </div>
-<div class="row">
+<div class="row  pb-1">
     <div class="col-2">
         <h4>Point :</h4>
     </div>
@@ -95,11 +114,23 @@
         <input bind:value={cPath} style="width: 100%;" type="text">
     </div>
 </div>
+<div class="row">
+    <div class="col-2">
+        <h4>Active :</h4>
+    </div>
+    <div class="col-10">
+     <h4>   <input style="width: 35px;height: 35px;" type=checkbox bind:checked={isActive}></h4>
+    </div>
+</div>
+
+
 {:else if selectedNavPage==1}
 <h3>Comment:</h3>
 <textarea bind:value={comment} style="width: 100%; height:120px"></textarea>
 <h3>Description:</h3>
 <textarea bind:value={description} style="width: 100%; height:240px"></textarea>
+
+
 {:else if selectedNavPage==2}
 <h1>Situations Page</h1>
 {/if}

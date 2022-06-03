@@ -14,7 +14,7 @@
         // {comment: "test11",description:"test11",code:"code11",isActive:false,id:10},
         // {comment: "test12",description:"test12",code:"code12",isActive:false,id:11}
     ]
-    export const db = {FileList:[],Situations:[],stCount:0,cmCount:14,Comments:testComments};
+    export const db = {FileList:[],Situations:[],stCount:0,cmCount:14,Comments:[]};
     export const getFileListFromLocalforage = ()=>{
         localforage.getItem('fileList').then(data => {
             if(data){
@@ -41,13 +41,13 @@
         localforage.getItem('comments').then(data => {
             if(data){
               //  console.log("kayıt getirme başarılı");
-                db.Situations=data;
+                db.Comments=data;
             }
         });
         localforage.getItem('commentsCount').then(data => {
             if(data){
               //  console.log("kayıt getirme başarılı");
-              db.stCount=data;
+              db.cmCount=data;
             }
         });
     }
@@ -66,10 +66,10 @@
     } 
     export const saveCommentsToFromLocalforage = ()=>{
         localforage.setItem('comments', db.Comments).then((x)=> {
-       // console.log("kayıt başarılı")
+        //console.log("comments kayırları başarılı")
     });
         localforage.setItem('commentsCount', db.cmCount).then((x)=> {
-       // console.log("kayıt başarılı")
+        //console.log("comment count kaydı başarılı");
     });
     } 
 </script>

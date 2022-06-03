@@ -3,7 +3,7 @@
 </script>
 
 <h1>
-    Author: Diyar Ceran
+    Developer: Diyar Ceran
     <br>
     Version: 0.0.1
 </h1>

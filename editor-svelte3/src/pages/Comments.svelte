@@ -40,6 +40,7 @@
             db.Comments.splice(index,1);
             db.Comments= db.Comments;
             selectedIndex=-1;
+            saveCommentsToFromLocalforage();
             }else{
                 alert("you cant't delete first comment");
             }
@@ -52,7 +53,22 @@
             selectedIndex=db.cmCount;
             changeId(db.cmCount);
             db.cmCount++;
+            saveCommentsToFromLocalforage();
         }
+
+        const _refresh=()=>{
+            db.Comments = db.Comments;
+        }
+
+        const cmodes = {
+        refresh:_refresh
+        }
+
+    const connectionWithChilds = (data)=>{
+        data=data.detail;
+       // console.log(data);
+        cmodes[data.mode](data.value);
+    }
 </script>
 <div class="test">
     <div class="row p-0 m-0">
@@ -82,8 +98,8 @@
                     on:drop|preventDefault={event => dropList(event, index)}
                     ondragover="return false"
                     on:dragenter={() => hovering = index}
+                    class:is-inavtive={!comment.isActive && selectedIndex!=comment.id}
                     class:selected={selectedIndex==comment.id}
-                    class:is-active={hovering === index}
                     class="card cm-card m-1 p-0">
                         {comment.comment}    
                     </div>                
@@ -92,7 +108,7 @@
             </div>
         </div>
         <div class="col-6 bg-white">
-            <CommentDetail bind:changeId={changeId} />
+            <CommentDetail on:connection={connectionWithChilds} bind:changeId={changeId} />
         </div>
     </div>
 </div>
@@ -112,5 +128,9 @@
         height: 550px;
         width: 100%;
         overflow: hidden;
+    }
+    .is-inavtive{
+        opacity: 0.9;
+        background-color: rgb(244, 149, 149) !important;
     }
 </style>
