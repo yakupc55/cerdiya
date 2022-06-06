@@ -7,12 +7,13 @@
     import Fa from "svelte-fa";
     import { onMount } from 'svelte';
 
-    const firstComment ={comment: "new comment",description:"new",code:"",isActive:false,id:db.cmCount,cPath:"",cPoint:0,situations:[]};
+    const firstComment ={comment: "new comment",description:"new",id:db.cmCount,code:"",isActive:false,cPath:"",cPoint:0,situations:[]};
     onMount(async () => {
-        
+        console.log(db);
 		if(db.Comments.length==0){
-            db.Comments = [firstComment];
-            db.cmCount=1;
+            db.Comments = [{comment: "new comment",description:"new",id:db.cmCount,code:"",isActive:false,cPath:"",cPoint:0,situations:[]}];
+            db.cmCount+=1;
+            saveCommentsToFromLocalforage();
         }
         //console.log(db.Comments);
 	});
@@ -52,11 +53,13 @@
 
         const addComment=(add)=>{
             let index = findIndexById(selectedIndex)+add;
-            db.Comments.splice(index,0,firstComment);
+            console.log(index);
+            db.Comments.splice(index,0,{comment: "new comment",description:"new",id:db.cmCount,code:"",isActive:false,cPath:"",cPoint:0,situations:[]});
+            
             db.Comments= db.Comments;
             selectedIndex=db.cmCount;
             changeId(db.cmCount);
-            db.cmCount++;
+            db.cmCount+=1;
             saveCommentsToFromLocalforage();
         }
 

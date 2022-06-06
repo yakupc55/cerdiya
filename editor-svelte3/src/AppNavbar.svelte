@@ -44,7 +44,7 @@
 		{/each}
 		</div>
 	</div>
-	<div>
+	<div style="font-size:30px">
 		<SaveButton />
 	</div>
 </nav>

@@ -98,7 +98,7 @@
     <div class="col-3 bg-secondary">
       
         <select
-        class="form-select w-100"
+        class="form-select"
         size="20"
         on:change={selectBoxOnChange}
         bind:value={selectedFile}

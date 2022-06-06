@@ -13,7 +13,7 @@
         // {comment: "test11",description:"test11",code:"code11",isActive:false,id:10},
         // {comment: "test12",description:"test12",code:"code12",isActive:false,id:11}
     ]
-    export const db = {FileList:[],Situations:[],stCount:0,cmCount:14,Comments:[]};
+    export const db = {FileList:[],Situations:[],stCount:0,cmCount:0,Comments:[]};
     export const getFileListFromLocalforage = ()=>{
         localforage.getItem('fileList').then(data => {
             if(data){

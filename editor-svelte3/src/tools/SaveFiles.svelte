@@ -1,7 +1,12 @@
 <script>
-import { faSave } from "@fortawesome/free-solid-svg-icons";
+    import { faSave } from "@fortawesome/free-solid-svg-icons";
     import Fa from "svelte-fa";
     import { db } from "../Datas/Datas.svelte";
+    
+    const electron = require('electron');
+    const path = require('path');
+    const fs = require('fs');
+
     let tempDb=null;
 
     function saveFiles(){  
@@ -57,6 +62,16 @@ import { faSave } from "@fortawesome/free-solid-svg-icons";
         }     
     });
 
+    Files.forEach((file) => {
+        if(file.data){
+            fs.writeFile(file.info.path, file.data, (err) => {
+                if (err) throw err;
+                //console.log('The file has been saved!');
+            });
+        }
+    });
+    console.log("savefiles is done");
+    
     //console.log(Files);
     }// end function saveFiles
 
