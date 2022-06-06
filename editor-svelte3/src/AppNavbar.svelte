@@ -6,6 +6,7 @@
 	import AddFile from './pages/AddFile.svelte';
     import TestPage from './pages/TestPage.svelte';
     import {st} from "./Datas/stores";
+	import SaveButton from "./tools/SaveFiles.svelte";
     const ccolor="bg-secondary active";
 	let currentPageComponent=Home;
 
@@ -42,6 +43,9 @@
 		<div on:click={()=>changePage(i)} to="testPage" class="nav-item nav-link {ccolor}">{name} </div>	
 		{/each}
 		</div>
+	</div>
+	<div>
+		<SaveButton />
 	</div>
 </nav>
 

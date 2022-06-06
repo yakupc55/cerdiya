@@ -132,11 +132,14 @@
     function getIdlist(){
         let idList=[];
         //console.log(situationsValues);
-        for(const st of situationsValues){
-           // console.log(st);
-            idList.push(st.value);
+        if(situationsValues){
+            for(const st of situationsValues){
+                // console.log(st);
+                idList.push(st.value);
+            }
         }
-    return idList;
+        //console.log(idList);
+        return idList;
     }
     const saveComment=()=>{
         let index = findIndexById(id);
