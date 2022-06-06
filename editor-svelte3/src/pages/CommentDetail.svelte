@@ -8,24 +8,95 @@
     import Fa from "svelte-fa";
     import { onMount } from 'svelte';
 
-    let pathItems = [];
+    let pathValue=null;
+    let pointValue=null;
+    let listIndex = -1;
+    let comment="";
+    let description="";
+    let cPath="";
+    let cPoint=0;
+    let code="";
+    let isActive=false;
+    let id;
+
+    $:pathItems = db.FileList.map(b => ({'label': b.name, 'value': b.path}));
+    $:pointItems = getPointList();
     onMount(async () => {
-		pathItems=[];
-        db.FileList.map(item => {
-            console.log(item);
-            pathItems.push({
-                value: item.path,
-                label: item.path
-            });
-        });
-        console.log(pathItems);
-        pathItems=pathItems;
+        //cPaht not empty .find index by path.later use this index to add value to pathValue
+        
 	});
 
-    function handleSelectPath(event) {
-    
+    function getPointValue(pointId,path){
+        listIndex=findIndexByPath(path);
+        pointItems = getPointList();
+        if( pointId>=0 && listIndex>=0){
+            let index = findIndexbyPoint(pointId);
+            
+            if(index>=0){
+                let point = db.FileList[listIndex].Structure[index];
+                return {'label': point.value, 'value': point.id};
+            }
+        }
+        return null;
     }
 
+    function findIndexbyPoint(pointId){
+        for(let i=0;i<db.FileList[listIndex].Structure.length;i++){
+            if(db.FileList[listIndex].Structure[i].id==pointId){
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    function getPathValue(path){
+        if(path && path.length>0){
+          let index = findIndexByPath(path);
+          if(index>=0){
+              listIndex=index;
+            return  pathValue = {'label': db.FileList[index].name, 'value': db.FileList[index].path};
+          }
+        }
+        return null;
+    }
+    //a function find index of array by path in db.FileList
+    const findIndexByPath=(path)=>{
+        for(let i=0;i<db.FileList.length;i++){
+            if(db.FileList[i].path==path){
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    function handleSelectPath(event) {
+       // console.log(event);
+       // console.log(cPath);
+        let path= event.detail.value;
+        listIndex = findIndexByPath(path);
+       // console.log(listIndex);
+        pointItems = getPointList();
+    }
+
+    function handleSelectPoint(event) {
+        console.log(event);
+        console.log(cPoint);
+        let point= event.detail.value;
+        console.log(pointValue);
+    }
+
+    function getPointList(){
+        if(listIndex>=0){
+            if(db.FileList[listIndex].Structure && db.FileList[listIndex].Structure.length>0){
+                return db.FileList[listIndex].Structure.filter(b => b.isCode==false).map(b => ({'label': b.value, 'value': b.id}));
+            }else{
+                return [];
+            }
+        }
+        else{
+            return [];
+        }
+    }
     import { createEventDispatcher } from 'svelte';
     const dispatch = createEventDispatcher();
 
@@ -35,20 +106,12 @@
                         });
     };
 
-    let comment="";
-    let description="";
-    let cPath="";
-    let cPoint=0;
-    let code="";
-    let isActive=false;
-
-    let id;
     const saveComment=()=>{
         let index = findIndexById(id);
         db.Comments[index].comment=comment;
         db.Comments[index].description=description;
-        db.Comments[index].cPath=cPath;
-        db.Comments[index].cPoint=cPoint;
+        db.Comments[index].cPath=(pathValue)?pathValue.value:"";
+        db.Comments[index].cPoint=(pointValue)?pointValue.value:-1;
         db.Comments[index].code=code;
         db.Comments[index].isActive=isActive;
         saveCommentsToFromLocalforage();
@@ -76,6 +139,8 @@
             cPoint=cm.cPoint;
             code=cm.code;
             isActive=cm.isActive;
+            pathValue= getPathValue(cm.cPath);
+            pointValue=getPointValue(cm.cPoint,cm.cPath);
         }
     }
 
@@ -114,7 +179,6 @@
     </div>
 </div>
 
-
 {#if selectedNavPage==0}
 <h3>Code:</h3>
 <textarea bind:value={code} style="width: 100%; height:200px"></textarea>
@@ -123,7 +187,10 @@
         <h4>Path :</h4>
     </div>
     <div class="col-10">
-        <Select {pathItems} on:select={handleSelectPath}></Select>
+        <Select
+        items={pathItems}
+        bind:value={pathValue}
+        on:select={handleSelectPath}></Select>
     </div>
 </div>
 <div class="row  pb-1">
@@ -131,7 +198,10 @@
         <h4>Point :</h4>
     </div>
     <div class="col-10">
-        <input bind:value={cPath} style="width: 100%;" type="text">
+        <Select
+        items={pointItems}
+        bind:value={pointValue}
+        on:select={handleSelectPoint}></Select>
     </div>
 </div>
 <div class="row">
@@ -142,7 +212,6 @@
      <h4>   <input style="width: 35px;height: 35px;" type=checkbox bind:checked={isActive}></h4>
     </div>
 </div>
-
 
 {:else if selectedNavPage==1}
 <h3>Comment:</h3>
@@ -158,7 +227,6 @@
 {:else}
         <h1>Please select a comment</h1>
 {/if}
-
 
 <style>
     
