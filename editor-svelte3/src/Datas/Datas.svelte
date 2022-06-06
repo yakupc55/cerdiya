@@ -1,5 +1,4 @@
 <script context="module">
-	import Situations from './../pages/Situations.svelte';
     let testComments =[
         // {comment: "test1",description:"test1",code:"code1",isActive:false,id:0},
         // {comment: "test2",description:"test2",code:"code2",isActive:false,id:1},

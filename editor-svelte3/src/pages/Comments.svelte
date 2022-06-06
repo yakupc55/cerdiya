@@ -6,11 +6,15 @@
     import { faCircleMinus,faCirclePlus,faCircleUp,faCircleDown,faCancel } from "@fortawesome/free-solid-svg-icons";
     import Fa from "svelte-fa";
     import { onMount } from 'svelte';
+
+    const firstComment ={comment: "new comment",description:"new",code:"",isActive:false,id:db.cmCount,cPath:"",cPoint:0,situations:[]};
     onMount(async () => {
+        
 		if(db.Comments.length==0){
-            db.Comments = [{comment: "test1",cPath:"",cPoint:0,description:"test1",code:"code1",isActive:false,id:0}];
+            db.Comments = [firstComment];
             db.cmCount=1;
         }
+        //console.log(db.Comments);
 	});
         //for drag list
         let hovering = false;
@@ -48,7 +52,7 @@
 
         const addComment=(add)=>{
             let index = findIndexById(selectedIndex)+add;
-            db.Comments.splice(index,0,{comment: "new comment",description:"new",code:"",isActive:false,id:db.cmCount});
+            db.Comments.splice(index,0,firstComment);
             db.Comments= db.Comments;
             selectedIndex=db.cmCount;
             changeId(db.cmCount);
@@ -93,7 +97,7 @@
                     <div
                     animate:flip={options}
                     draggable={true} 
-                    on:click={()=>{selectedIndex=comment.id;changeId(index);}}
+                    on:click={()=>{selectedIndex=comment.id;changeId(comment.id);}}
                     on:dragstart={event => _dragstartList(event, index)}
                     on:drop|preventDefault={event => dropList(event, index)}
                     ondragover="return false"

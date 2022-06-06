@@ -10,17 +10,19 @@
 
     let pathValue=null;
     let pointValue=null;
+    let situationsValues=null;
+
     let listIndex = -1;
     let comment="";
     let description="";
-    let cPath="";
-    let cPoint=0;
     let code="";
     let isActive=false;
     let id;
+    let firstIndex=-1;
 
     $:pathItems = db.FileList.map(b => ({'label': b.name, 'value': b.path}));
     $:pointItems = getPointList();
+    $:situationsItems = getSituationsList();
     onMount(async () => {
         //cPaht not empty .find index by path.later use this index to add value to pathValue
         
@@ -59,7 +61,21 @@
         }
         return null;
     }
-    //a function find index of array by path in db.FileList
+
+    function getSituationsValues(list){
+        if(list && list.length>0 && firstIndex>=0){
+            let valueList=[];
+            for(let i=0;i<list.length;i++){
+                let index = db.Situations.findIndex(b => b.id==list[i]);
+                if(index>=0){
+                    valueList.push({'label': db.Situations[index].name, 'value': list[i]});
+                }
+            }
+            return valueList;
+        }
+        return null;
+    }   
+
     const findIndexByPath=(path)=>{
         for(let i=0;i<db.FileList.length;i++){
             if(db.FileList[i].path==path){
@@ -78,12 +94,8 @@
         pointItems = getPointList();
     }
 
-    function handleSelectPoint(event) {
-        console.log(event);
-        console.log(cPoint);
-        let point= event.detail.value;
-        console.log(pointValue);
-    }
+    function handleSelectPoint(event) { }
+    function handleSelectSituations(event) { }
 
     function getPointList(){
         if(listIndex>=0){
@@ -97,6 +109,17 @@
             return [];
         }
     }
+
+    //a function get situations list from db.Situations
+    function getSituationsList(){
+        if(db.Situations && db.Situations.length>0){
+            return db.Situations.map(b => ({'label': b.name, 'value': b.id}));
+        }
+        else{
+            return [];
+        }
+    }
+
     import { createEventDispatcher } from 'svelte';
     const dispatch = createEventDispatcher();
 
@@ -106,6 +129,15 @@
                         });
     };
 
+    function getIdlist(){
+        let idList=[];
+        //console.log(situationsValues);
+        for(const st of situationsValues){
+           // console.log(st);
+            idList.push(st.value);
+        }
+    return idList;
+    }
     const saveComment=()=>{
         let index = findIndexById(id);
         db.Comments[index].comment=comment;
@@ -114,6 +146,7 @@
         db.Comments[index].cPoint=(pointValue)?pointValue.value:-1;
         db.Comments[index].code=code;
         db.Comments[index].isActive=isActive;
+        db.Comments[index].situations=getIdlist();
         saveCommentsToFromLocalforage();
         refresh();
     }
@@ -128,19 +161,20 @@
     }
 
     const changePageById = (_id) =>{
-        //console.log(_id);
+        // console.log(_id);
+        // console.log(db.Comments);
         id = _id;
-        if(id>-1){
+        firstIndex=findIndexById(id);
+        if(id>-1 && firstIndex>-1){
             let cm=db.Comments[findIndexById(id)];
             //console.log(cm);
             comment=cm.comment;
             description=cm.description;
-            cPath=cm.cPath;
-            cPoint=cm.cPoint;
             code=cm.code;
             isActive=cm.isActive;
             pathValue= getPathValue(cm.cPath);
             pointValue=getPointValue(cm.cPoint,cm.cPath);
+            situationsValues=getSituationsValues(cm.situations);
         }
     }
 
@@ -221,7 +255,13 @@
 
 
 {:else if selectedNavPage==2}
-<h1>Situations Page</h1>
+
+<h3>Situations:</h3>
+<Select
+        items={situationsItems}
+        bind:value={situationsValues}
+        isMulti=true
+        on:select={handleSelectSituations}></Select>
 {/if}
 
 {:else}
