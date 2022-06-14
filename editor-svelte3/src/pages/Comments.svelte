@@ -9,7 +9,8 @@
 
     const firstComment ={comment: "new comment",description:"new",id:db.cmCount,code:"",isActive:false,cPath:"",cPoint:0,situations:[]};
     onMount(async () => {
-        console.log(db);
+        changeId(-1);
+        //console.log(db);
 		if(db.Comments.length==0){
             db.Comments = [{comment: "new comment",description:"new",id:db.cmCount,code:"",isActive:false,cPath:"",cPoint:0,situations:[]}];
             db.cmCount+=1;
@@ -19,7 +20,7 @@
 	});
         //for drag list
         let hovering = false;
-        let changeId;
+        let changeId=()=>{};
         const options = {duration:300};
         const dropList= (event, target)=>{
             db.Comments = _dropList(event, target,db.Comments,()=>{});
