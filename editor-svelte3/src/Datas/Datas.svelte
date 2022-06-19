@@ -1,4 +1,5 @@
 <script context="module">
+	import { defaults } from './../../node_modules/codemirror/src/edit/options.js';
     let testComments =[
         // {comment: "test1",description:"test1",code:"code1",isActive:false,id:0},
         // {comment: "test2",description:"test2",code:"code2",isActive:false,id:1},
@@ -13,7 +14,7 @@
         // {comment: "test11",description:"test11",code:"code11",isActive:false,id:10},
         // {comment: "test12",description:"test12",code:"code12",isActive:false,id:11}
     ]
-    export const db = {FileList:[],Situations:[],stCount:0,cmCount:0,Comments:[]};
+    export const db = {FileList:[],Situations:[],stCount:0,cmCount:0,Comments:[],project:{version:"v.0.0.1",projectMode:false}};
     export const getFileListFromLocalforage = ()=>{
         localforage.getItem('fileList').then(data => {
             if(data){
@@ -36,6 +37,46 @@
             }
         });
     }
+
+    export const changeDbData =(newDb)=>{
+        db.Comments=newDb.Comments;
+        db.FileList=newDb.FileList;
+        db.Situations=newDb.Situations;
+        db.cmCount=newDb.cmCount;
+        db.stCount=newDb.stCount;
+        db.project={version:"v.0.0.1",projectMode:false};
+    }
+
+    export const resetDbData =()=>{
+        db.Comments=[];
+        db.FileList=[];
+        db.Situations=[];
+        db.cmCount=0;
+        db.stCount=0;
+        saveAllData();
+    }
+    export const saveAllData= ()=>{
+        saveFileListToFromLocalforage();
+        saveSituationsToFromLocalforage();
+        saveCommentsToFromLocalforage();
+        saveCommentsToFromLocalforage();
+    }
+
+    export const getProjectDetailFromLocalforage = ()=>{
+        localforage.getItem('projectDetail').then(data => {
+            if(data){
+              //  console.log("kayıt getirme başarılı");
+                db.project=data;
+            }
+        });
+    }
+
+    export const saveProjectDetailToFromLocalforage = ()=>{
+        localforage.setItem('projectDetail', db.FileList).then((x)=> {
+       // console.log("kayıt başarılı")
+    });
+    } 
+
     export const getCommentsFromLocalforage = ()=>{
         localforage.getItem('comments').then(data => {
             if(data){

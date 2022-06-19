@@ -18,7 +18,7 @@
     ];
     onMount(async () => {
         // console.log(db.FileList[0].Structure);
-        if(db.FileList[0].Structure==undefined){
+        if(db.FileList.length> 0 && db.FileList[0].Structure==undefined){
             db.FileList[0].Structure = [];
             db.FileList[0].idCount = 0;
         }
@@ -87,7 +87,8 @@
 
     const selectBoxOnChange = (event)=>{
         let index= event.target.selectedIndex;
-        if(db.FileList[index].Structure==undefined){
+        console.log(index);
+        if(!db.FileList[index].Structure){
             db.FileList[index].Structure = [];
             db.FileList[index].idCount = 0;
         }
