@@ -1,9 +1,21 @@
 <script>
 	import { createEventDispatcher } from 'svelte';
-    import {db,changeDbData,resetDbData} from '../Datas/Datas.svelte';
+    import {db,changeDbData,resetDbData,saveProjectDetailToFromLocalforage} from '../Datas/Datas.svelte';
+    import { onMount, onDestroy } from "svelte";
+
+    let projectSettings={version:"v.0.0.1",projectMode:false};
+
+    onMount(async () => {
+        setTimeout(() => {
+            db=db;
+            projectSettings=db.project;
+        }, 200);
+    });
+
     const fs = require('fs');
     const electron = require('electron');
     
+
     const openProject = async function() {
         const o = await electron.remote.dialog.showOpenDialog({
             title: 'Select a file',
@@ -48,13 +60,38 @@
         });
         electron.dialog.showMessageBox({ message: "Exported data to " + o.filePath, buttons: ["OK"] });
     };
-</script>
 
-<button type="button"  class="btn btn-primary btn-block uploadButton" on:click={startNewProject}>Start New Project</button>
-<button type="button"  class="btn btn-primary btn-block uploadButton" on:click={openProject} >Open a Project</button>
-<button type="button"  class="btn btn-primary btn-block uploadButton" on:click={saveProject} >Save The Project</button>
+    const saveProjectSetting = async ()=>{
+        db.project =await JSON.parse(JSON.stringify(projectSettings));
+        saveProjectDetailToFromLocalforage();
+    }
+
+</script>
+{#if db.dataStatus}
+<button type="button"  class="btn btn-primary " on:click={startNewProject}>Start New Project</button>
+<button type="button"  class="btn btn-primary " on:click={openProject} >Open a Project</button>
+<button type="button"  class="btn btn-primary " on:click={saveProject} >Save The Project</button>
+
+<br>
+<hr>
+<div> 
+    <input style="width:18px;height:18px" type=checkbox  bind:checked={projectSettings.projectMode}>
+    <b style="font-size:18px"> Project Mode</b>
+    <span style="font-size:12px">( path of files add by project path)</span>
+</div>
+
+<br>
+<button type="button"  class="btn btn-primary btn-block uploadButton" on:click={saveProjectSetting} >Save The Settings</button>
+
+
+<br>
+<hr>
 <h1>
     Developer: Diyar Ceran
     <br>
-    Version: 0.0.1
+    Version: 0.0.2
 </h1>
+
+{:else}
+<h1>waiting the data...</h1>
+{/if}

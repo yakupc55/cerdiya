@@ -14,7 +14,7 @@
         // {comment: "test11",description:"test11",code:"code11",isActive:false,id:10},
         // {comment: "test12",description:"test12",code:"code12",isActive:false,id:11}
     ]
-    export const db = {FileList:[],Situations:[],stCount:0,cmCount:0,Comments:[],project:{version:"v.0.0.1",projectMode:false}};
+    export const db = {FileList:[],Situations:[],stCount:0,cmCount:0,Comments:[],project:{version:"v.0.0.1",projectMode:false},dataStatus:false};
     export const getFileListFromLocalforage = ()=>{
         localforage.getItem('fileList').then(data => {
             if(data){
@@ -59,7 +59,14 @@
         saveFileListToFromLocalforage();
         saveSituationsToFromLocalforage();
         saveCommentsToFromLocalforage();
-        saveCommentsToFromLocalforage();
+        saveProjectDetailToFromLocalforage();
+    }
+
+    export const getAllData = ()=>{
+        getFileListFromLocalforage();
+        getSituationsFromLocalforage();
+        getCommentsFromLocalforage();
+        getProjectDetailFromLocalforage();
     }
 
     export const getProjectDetailFromLocalforage = ()=>{
@@ -72,7 +79,7 @@
     }
 
     export const saveProjectDetailToFromLocalforage = ()=>{
-        localforage.setItem('projectDetail', db.FileList).then((x)=> {
+        localforage.setItem('projectDetail', db.project).then((x)=> {
        // console.log("kayıt başarılı")
     });
     } 
@@ -117,9 +124,8 @@
     import { onMount,onDestroy } from 'svelte';
     onMount( () => {
         setTimeout(() => {
-            getFileListFromLocalforage();
-            getSituationsFromLocalforage();
-            getCommentsFromLocalforage();
+            getAllData();
+            db.dataStatus=true;
         }, 100);
 	});
 	onDestroy(() => {
