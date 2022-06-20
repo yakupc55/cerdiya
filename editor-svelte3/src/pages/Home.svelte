@@ -1,13 +1,13 @@
 <script>
 	import { createEventDispatcher } from 'svelte';
-    import {db,changeDbData,resetDbData,saveProjectDetailToFromLocalforage} from '../Datas/Datas.svelte';
+    import {db,noDb,changeDbData,resetDbData,saveProjectDetailToFromLocalforage,changeRootFiles} from '../Datas/Datas.svelte';
     import { onMount, onDestroy } from "svelte";
 
     let projectSettings={version:"v.0.0.1",projectMode:false};
 
     onMount(async () => {
         setTimeout(() => {
-            db=db;
+            noDb.Project.dataStatus=noDb.Project.dataStatus;
             projectSettings=db.project;
         }, 200);
     });
@@ -26,6 +26,8 @@
             properties: ['openFile']
         });
         if(o.filePaths.length > 0) {
+            console.log("o.filePaths[0] :");
+            console.log(o.filePaths[0]);
             console.log(o.filePaths[0]);
             fs.readFile(o.filePaths[0], function (error, content) {
                 console.log("its good")
@@ -33,41 +35,72 @@
                 console.log(test);
                 changeDbData(test);
                 console.log(db);
+                projectSettings=db.project;
             });
+            noDb.Project.path=o.filePaths[0];
+            console.log("noDb :");
+            console.log(noDb);
         }
     };
 
     const startNewProject = async function(){
-        console.log("start new project")
-        resetDbData();
-    }
-
-    const saveProject = async function() {
+        
         const o = await electron.remote.dialog.showSaveDialog({
             title: 'Save file as',
             filters: [{
                 name: "Cerdiya Project",
                 extensions: ["crdy"]
-            }]
+            }],
+            properties: ['saveFile']
         });
 
-        console.log(o.filePath);
-        var data=JSON.stringify(db);
-        fs.writeFile(o.filePath, data, function(err) {
-            if (err) {
-            console.log(err);
-            }
+        if(o.filePath) {
+            noDb.Project.path=o.filePath;
+            console.log("start new project")
+            resetDbData();
+            var data=JSON.stringify(db);
+            fs.writeFile(o.filePath, data, function(err) {
+                if (err) {
+                console.log(err);
+                }
+            });
+            electron.remote.dialog.showMessageBox({ message: "Exported data to " + o.filePath, buttons: ["OK"] });
+            console.log("no db path");
+            console.log(noDb.Project.path);
+        }
+    }
+
+    const saveProject = async function() {
+
+        const o = await electron.remote.dialog.showSaveDialog({
+            title: 'Save file as',
+            filters: [{
+                name: "Cerdiya Project",
+                extensions: ["crdy"]
+            }],
+            properties: ['saveFile']
         });
-        electron.dialog.showMessageBox({ message: "Exported data to " + o.filePath, buttons: ["OK"] });
+        
+        if(o.filePath) {
+            console.log(o.filePath);
+            var data=JSON.stringify(db);
+            fs.writeFile(o.filePath, data, function(err) {
+                if (err) {
+                console.log(err);
+                }
+            });
+            electron.remote.dialog.showMessageBox({ message: "Exported data to " + o.filePath, buttons: ["OK"] });
+        }
     };
 
     const saveProjectSetting = async ()=>{
+        changeRootFiles(projectSettings.projectMode);
         db.project =await JSON.parse(JSON.stringify(projectSettings));
         saveProjectDetailToFromLocalforage();
     }
 
 </script>
-{#if db.dataStatus}
+{#if noDb.Project.dataStatus}
 <button type="button"  class="btn btn-primary " on:click={startNewProject}>Start New Project</button>
 <button type="button"  class="btn btn-primary " on:click={openProject} >Open a Project</button>
 <button type="button"  class="btn btn-primary " on:click={saveProject} >Save The Project</button>

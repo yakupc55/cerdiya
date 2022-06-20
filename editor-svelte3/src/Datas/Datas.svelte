@@ -14,7 +14,8 @@
         // {comment: "test11",description:"test11",code:"code11",isActive:false,id:10},
         // {comment: "test12",description:"test12",code:"code12",isActive:false,id:11}
     ]
-    export const db = {FileList:[],Situations:[],stCount:0,cmCount:0,Comments:[],project:{version:"v.0.0.1",projectMode:false},dataStatus:false};
+    export const db = {FileList:[],Situations:[],stCount:0,cmCount:0,Comments:[],project:{version:"v.0.0.1",projectMode:false}};
+    export const noDb={Project:{path:'',dataStatus:false}}
     export const getFileListFromLocalforage = ()=>{
         localforage.getItem('fileList').then(data => {
             if(data){
@@ -118,14 +119,69 @@
         localforage.setItem('commentsCount', db.cmCount).then((x)=> {
         //console.log("comment count kaydı başarılı");
     });
-    } 
+    }
+    
+    const changeRootFilesFunc= (mode)=>{
+        // console.log("------------");
+        // console.log("değiştirme yapısına girildi");
+        // console.log("değiştirilme öncesi dosyalar");
+        // console.log(db.FileList);
+        // console.log("noDb : ");
+        // console.log(noDb);
+        if(noDb.Project.path.length>1){
+            // console.log("buraya giriyor başarılı bir şekilde");
+            const index=noDb.Project.path.lastIndexOf('\\');
+            // console.log("index :");
+            // console.log(index);
+            const rootPath=noDb.Project.path.substring(0,index+1);
+            // console.log("rootPath :");
+            // console.log(rootPath);
+            if(mode){
+                for (let i = 0; i < db.FileList.length; i++) {
+                    console.log("db.FileList[i].path.substring(0,rootPath.length) :");
+                    console.log(db.FileList[i].path.substring(0,rootPath.length));
+                    if(db.FileList[i].path.substring(0,rootPath.length)==rootPath){
+                        // console.log("db.FileList[i].path.substring(rootPath.length,db.FileList[i].path.length) :");
+                        // console.log(db.FileList[i].path.substring(rootPath.length,db.FileList[i].path.length));
+                        db.FileList[i].path= db.FileList[i].path.substring(rootPath.length,db.FileList[i].path.length);
+                    }
+                }
+            }
+            else{
+                for (let i = 0; i < db.FileList.length; i++) {
+                    const search=db.FileList[i].path.search(":");
+                    if(search==-1){
+                        db.FileList[i].path=rootPath+db.FileList[i].path;
+                    }
+                }
+            }
+            saveFileListToFromLocalforage();
+        }
+        console.log("değiştirilme sonrası dosyalar");
+        console.log(db.FileList);
+        console.log("------------");
+    }
+    export const changeRootFiles =(mode)=>{
+        localforage.getItem('projectDetail').then(data => {
+            if(data){
+                // console.log("local forage çağırıldı");
+                // console.log("data :");
+                // console.log(data);
+                // console.log("mode :");
+                // console.log(mode);
+              if(data.projectMode!=mode)
+                changeRootFilesFunc(mode);
+            }
+        });
+        
+    }
 </script>
 <script>
     import { onMount,onDestroy } from 'svelte';
     onMount( () => {
         setTimeout(() => {
             getAllData();
-            db.dataStatus=true;
+            noDb.Project.dataStatus=true;
         }, 100);
 	});
 	onDestroy(() => {
