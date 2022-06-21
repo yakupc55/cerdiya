@@ -6,14 +6,14 @@
     import { faCircleMinus,faCirclePlus,faCircleUp,faCircleDown,faCancel } from "@fortawesome/free-solid-svg-icons";
     import Fa from "svelte-fa";
     import { onMount } from 'svelte';
-
-    const firstComment ={comment: "new comment",description:"new",id:db.cmCount,code:"",isActive:false,cPath:"",cPoint:0,situations:[]};
+    
+    const firstComment ={comment: "new comment",description:"new",id:db.Counts.comment,code:"",isActive:false,cPath:-1,cPoint:0,situations:[]};
     onMount(async () => {
         changeId(-1);
         //console.log(db);
 		if(db.Comments.length==0){
-            db.Comments = [{comment: "new comment",description:"new",id:db.cmCount,code:"",isActive:false,cPath:"",cPoint:0,situations:[]}];
-            db.cmCount+=1;
+            db.Comments = [{comment: "new comment",description:"new",id:db.Counts.comment,code:"",isActive:false,cPath:-1,cPoint:0,situations:[]}];
+            db.Counts.comment+=1;
             saveCommentsToFromLocalforage();
         }
         //console.log(db.Comments);
@@ -54,13 +54,13 @@
 
         const addComment=(add)=>{
             let index = findIndexById(selectedIndex)+add;
-            console.log(index);
-            db.Comments.splice(index,0,{comment: "new comment",description:"new",id:db.cmCount,code:"",isActive:false,cPath:"",cPoint:0,situations:[]});
+            //console.log(index);
+            db.Comments.splice(index,0,{comment: "new comment",description:"new",id:db.Counts.comment,code:"",isActive:false,cPath:-1,cPoint:0,situations:[]});
             
             db.Comments= db.Comments;
-            selectedIndex=db.cmCount;
-            changeId(db.cmCount);
-            db.cmCount+=1;
+            selectedIndex=db.Counts.comment;
+            changeId(db.Counts.comment);
+            db.Counts.comment+=1;
             saveCommentsToFromLocalforage();
         }
 

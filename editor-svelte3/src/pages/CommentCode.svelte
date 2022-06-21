@@ -11,7 +11,7 @@ export let code="";
 export let pathValue=null;
 export let pointValue=null;
 
-$:pathItems = db.FileList.map(b => ({'label': b.name, 'value': b.path}));
+$:pathItems = db.FileList.map(b => ({'label': b.name, 'value': b.id}));
 $:pointItems = getPointList();
 
 export const changeId = (_id)=> changePageById(_id);
@@ -30,14 +30,16 @@ function changePageById(_id){
     //console.log(id);
     if(id>-1){
         let cm=db.Comments[findIndexById(id)];
+        // console.log("cm :");
+        // console.log(cm);
         isActive=cm.isActive;
         code=cm.code;
         pathValue= getPathValue(cm.cPath);
         pointValue=getPointValue(cm.cPoint,cm.cPath);
     }
 }
-function getPointValue(pointId,path){
-        listIndex=findIndexByPath(path);
+function getPointValue(pointId,pathId){
+        listIndex=findFileIndexById(pathId);
         pointItems = getPointList();
         if( pointId>=0 && listIndex>=0){
             let index = findIndexbyPoint(pointId);
@@ -59,19 +61,26 @@ function findIndexbyPoint(pointId){
     return -1;
 }
 
-function getPathValue(path){
-        if(path && path.length>0){
-          let index = findIndexByPath(path);
+function getPathValue(id){
+        if(id>=0){
+          let index = findFileIndexById(id);
+
+        //   console.log("db.FileList[index] :");
+        //   console.log(db.FileList[index]);
           if(index>=0){
               listIndex=index;
-            return  pathValue = {'label': db.FileList[index].name, 'value': db.FileList[index].path};
+            return  pathValue = {'label': db.FileList[index].name, 'value': db.FileList[index].id};
           }
         }
         return null;
 }
-const findIndexByPath=(path)=>{
+const findFileIndexById=(id)=>{
+    // console.log("find file index by id");
+    // console.log(id);
         for(let i=0;i<db.FileList.length;i++){
-            if(db.FileList[i].path==path){
+            if(db.FileList[i].id==id){
+                // console.log("return true id :");
+                // console.log(i);
                 return i;
             }
         }
@@ -81,8 +90,10 @@ const findIndexByPath=(path)=>{
 function handleSelectPath(event) {
     // console.log(event);
     // console.log(cPath);
-    let path= event.detail.value;
-    listIndex = findIndexByPath(path);
+    let id= event.detail.value;
+    // console.log("handle evetn path id :");
+    // console.log(id);
+    listIndex = findFileIndexById(id);
     // console.log(listIndex);
     pointItems = getPointList();
 }
@@ -91,6 +102,8 @@ function handleSelectPoint(event) { }
 
 
 function getPointList(){
+    // console.log("listIndex :");
+    // console.log(listIndex);
     if(listIndex>=0){
         if(db.FileList[listIndex].Structure && db.FileList[listIndex].Structure.length>0){
             return db.FileList[listIndex].Structure.filter(b => b.isCode==false).map(b => ({'label': b.value, 'value': b.id}));

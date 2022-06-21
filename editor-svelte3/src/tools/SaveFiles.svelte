@@ -1,7 +1,7 @@
 <script>
     import { faSave } from "@fortawesome/free-solid-svg-icons";
     import Fa from "svelte-fa";
-    import { db } from "../Datas/Datas.svelte";
+    import { db,noDb } from "../Datas/Datas.svelte";
     
     const electron = require('electron');
     const path = require('path');
@@ -64,7 +64,12 @@
 
     Files.forEach((file) => {
         if(file.data){
-            fs.writeFile(file.info.path, file.data, (err) => {
+            var path="";
+            if(noDb.Project.dataStatus && noDb.Project.path.length>1)
+            path = noDb.Project.rootPath;
+            
+            path+=file.info.path;
+            fs.writeFile(path, file.data, (err) => {
                 if (err) throw err;
                 //console.log('The file has been saved!');
             });

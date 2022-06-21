@@ -19,14 +19,15 @@
     let _tempValue="";
     let isNew=false;
     const saveSituation =(index)=>{
+        
         if(db.Situations.length==0){
-            db.Situations = [{name:firstValue,isActive:false,id:db.stCount}];
-            db.stCount++;
+            db.Situations = [{name:firstValue,isActive:false,id:db.Counts.situation}];
+            db.Counts.situation++;
         }
         else{
             updateIndex = -1;
             db.Situations[index].name=_tempValue;
-            db.stCount++;
+            db.Counts.situation++;
         }
         saveSituationsToFromLocalforage();
     }
@@ -49,9 +50,9 @@
     }
     const openNewSituation=(index)=>{
         _tempValue="";
-        db.Situations.splice(index,0,{name:"new situation",isActive:false,id:db.stCount});
-        updateIndex=db.stCount;
-        db.stCount++;
+        db.Situations.splice(index,0,{name:"new situation",isActive:false,id:db.Counts.situation});
+        updateIndex=db.Counts.situation;
+        db.Counts.situation++;
         isNew=true;
         lastNewIndex=index;
     }

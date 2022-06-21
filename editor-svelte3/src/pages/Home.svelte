@@ -38,8 +38,8 @@
                 projectSettings=db.project;
             });
             noDb.Project.path=o.filePaths[0];
-            console.log("noDb :");
-            console.log(noDb);
+            const index=noDb.Project.path.lastIndexOf('\\');
+            noDb.Project.rootPath=noDb.Project.path.substring(0,index+1);
         }
     };
 
@@ -56,6 +56,8 @@
 
         if(o.filePath) {
             noDb.Project.path=o.filePath;
+            const index=noDb.Project.path.lastIndexOf('\\');
+            noDb.Project.rootPath=noDb.Project.path.substring(0,index+1);
             console.log("start new project")
             resetDbData();
             var data=JSON.stringify(db);

@@ -14,8 +14,9 @@
         // {comment: "test11",description:"test11",code:"code11",isActive:false,id:10},
         // {comment: "test12",description:"test12",code:"code12",isActive:false,id:11}
     ]
-    export const db = {FileList:[],Situations:[],stCount:0,cmCount:0,Comments:[],project:{version:"v.0.0.1",projectMode:false}};
-    export const noDb={Project:{path:'',dataStatus:false}}
+    export const db = {FileList:[],Situations:[],Counts:{situation:0,comment:0,file:0},Comments:[],project:{version:"v.0.0.1",projectMode:false}};
+    export const noDb={Project:{rootPath:'',path:'',dataStatus:false}}
+
     export const getFileListFromLocalforage = ()=>{
         localforage.getItem('fileList').then(data => {
             if(data){
@@ -24,17 +25,21 @@
             }
         });
     }
+
+    const getAllCountsFromLocalforage = ()=>{
+        localforage.getItem('Counts').then(data => {
+            if(data){
+              //  console.log("kayıt getirme başarılı");
+              db.Counts=data;
+            }
+        });
+    }
+
     export const getSituationsFromLocalforage = ()=>{
         localforage.getItem('situations').then(data => {
             if(data){
               //  console.log("kayıt getirme başarılı");
                 db.Situations=data;
-            }
-        });
-        localforage.getItem('situationsCount').then(data => {
-            if(data){
-              //  console.log("kayıt getirme başarılı");
-              db.stCount=data;
             }
         });
     }
@@ -43,8 +48,7 @@
         db.Comments=newDb.Comments;
         db.FileList=newDb.FileList;
         db.Situations=newDb.Situations;
-        db.cmCount=newDb.cmCount;
-        db.stCount=newDb.stCount;
+        db.Counts=newDb.Counts;
         db.project={version:"v.0.0.1",projectMode:false};
     }
 
@@ -52,8 +56,9 @@
         db.Comments=[];
         db.FileList=[];
         db.Situations=[];
-        db.cmCount=0;
-        db.stCount=0;
+        db.Counts.comment=0;
+        db.Counts.situation=0;
+        db.Counts.file=0;
         saveAllData();
     }
     export const saveAllData= ()=>{
@@ -61,6 +66,7 @@
         saveSituationsToFromLocalforage();
         saveCommentsToFromLocalforage();
         saveProjectDetailToFromLocalforage();
+        getAllCountsFromLocalforage();
     }
 
     export const getAllData = ()=>{
@@ -68,6 +74,7 @@
         getSituationsFromLocalforage();
         getCommentsFromLocalforage();
         getProjectDetailFromLocalforage();
+
     }
 
     export const getProjectDetailFromLocalforage = ()=>{
@@ -79,6 +86,12 @@
         });
     }
 
+    export const saveAllCountsToFromLocalforage = ()=>{
+        localforage.setItem('Counts', db.Counts).then((x)=> {
+       // console.log("kayıt başarılı")
+    });
+    }
+     
     export const saveProjectDetailToFromLocalforage = ()=>{
         localforage.setItem('projectDetail', db.project).then((x)=> {
        // console.log("kayıt başarılı")
@@ -92,33 +105,26 @@
                 db.Comments=data;
             }
         });
-        localforage.getItem('commentsCount').then(data => {
-            if(data){
-              //  console.log("kayıt getirme başarılı");
-              db.cmCount=data;
-            }
-        });
     }
+
     export const saveFileListToFromLocalforage = ()=>{
         localforage.setItem('fileList', db.FileList).then((x)=> {
        // console.log("kayıt başarılı")
     });
     } 
+
     export const saveSituationsToFromLocalforage = ()=>{
         localforage.setItem('situations', db.Situations).then((x)=> {
        // console.log("kayıt başarılı")
     });
-        localforage.setItem('situationsCount', db.stCount).then((x)=> {
-       // console.log("kayıt başarılı")
-    });
+        saveAllCountsToFromLocalforage();
     } 
+
     export const saveCommentsToFromLocalforage = ()=>{
         localforage.setItem('comments', db.Comments).then((x)=> {
         //console.log("comments kayırları başarılı")
-    });
-        localforage.setItem('commentsCount', db.cmCount).then((x)=> {
-        //console.log("comment count kaydı başarılı");
-    });
+        });
+        saveAllCountsToFromLocalforage();
     }
     
     const changeRootFilesFunc= (mode)=>{
@@ -130,12 +136,7 @@
         // console.log(noDb);
         if(noDb.Project.path.length>1){
             // console.log("buraya giriyor başarılı bir şekilde");
-            const index=noDb.Project.path.lastIndexOf('\\');
-            // console.log("index :");
-            // console.log(index);
-            const rootPath=noDb.Project.path.substring(0,index+1);
-            // console.log("rootPath :");
-            // console.log(rootPath);
+            const rootPath=noDb.Project.rootPath;
             if(mode){
                 for (let i = 0; i < db.FileList.length; i++) {
                     console.log("db.FileList[i].path.substring(0,rootPath.length) :");
