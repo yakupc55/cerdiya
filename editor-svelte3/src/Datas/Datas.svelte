@@ -49,7 +49,7 @@
         db.FileList=newDb.FileList;
         db.Situations=newDb.Situations;
         db.Counts=newDb.Counts;
-        db.project={version:"v.0.0.1",projectMode:false};
+        db.project=newDb.project;
     }
 
     export const resetDbData =()=>{

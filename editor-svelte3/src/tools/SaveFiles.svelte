@@ -22,7 +22,7 @@
         if(isCommitActive(index)){
             // console.log("aktive commit");
             // console.log(comment);
-            findex=tempDb.FileList.findIndex(file => file.path == comment.cPath);
+            findex=tempDb.FileList.findIndex(file => file.id== comment.cPath);
             if(findex>-1 && tempDb.FileList[findex].Structure){
                 pindex=tempDb.FileList[findex].Structure.findIndex(point => point.id == comment.cPoint);
                 // let test=tempDb.FileList[findex].Structure[pindex];
@@ -62,10 +62,14 @@
         }     
     });
 
+    // console.log("Files :");
+    // console.log(Files);
     Files.forEach((file) => {
         if(file.data){
+            // console.log("file.data :");
+            // console.log(file.data);
             var path="";
-            if(noDb.Project.dataStatus && noDb.Project.path.length>1)
+            if(db.project.projectMode && noDb.Project.path.length>1)
             path = noDb.Project.rootPath;
             
             path+=file.info.path;

@@ -3,7 +3,7 @@
     import {db,noDb,changeDbData,resetDbData,saveProjectDetailToFromLocalforage,changeRootFiles} from '../Datas/Datas.svelte';
     import { onMount, onDestroy } from "svelte";
 
-    let projectSettings={version:"v.0.0.1",projectMode:false};
+    let projectSettings=db.project;
 
     onMount(async () => {
         setTimeout(() => {
@@ -92,6 +92,9 @@
                 }
             });
             electron.remote.dialog.showMessageBox({ message: "Exported data to " + o.filePath, buttons: ["OK"] });
+            noDb.Project.path=o.filePath;
+            const index=noDb.Project.path.lastIndexOf('\\');
+            noDb.Project.rootPath=noDb.Project.path.substring(0,index+1);
         }
     };
 
