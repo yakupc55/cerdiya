@@ -1,8 +1,8 @@
 <script>
-    import { faSave } from "@fortawesome/free-solid-svg-icons";
+    import { faRefresh,faSave } from "@fortawesome/free-solid-svg-icons";
     import Fa from "svelte-fa";
     import { db,noDb } from "../Datas/Datas.svelte";
-    
+    import {writeToDisk} from "../Datas/projectOperations.svelte";
     const electron = require('electron');
     const path = require('path');
     const fs = require('fs');
@@ -99,5 +99,14 @@
         }
         return true;
     }
+
+    function savePro(){
+        if(noDb.Project.path.length>1){
+            writeToDisk(noDb.Project.path);
+        }else{
+            alert("firstly save project on somewhere");
+        }
+    }
 </script>
-<button on:click={saveFiles} class="button btn-white m-0 p-1"><Fa icon={faSave} color="black" /></button> 
+<button on:click={saveFiles} class="button btn-white m-0 p-1"><Fa icon={faRefresh} color="black" /></button> 
+<button on:click={savePro} class="button btn-white m-0 p-1"><Fa icon={faSave} color="black" /></button> 
