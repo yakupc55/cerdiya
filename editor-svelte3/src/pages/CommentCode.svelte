@@ -2,6 +2,7 @@
 
 import {db,saveCommentsToFromLocalforage} from '../Datas/Datas.svelte';
 import Select from 'svelte-select';
+import CodeMirror from '../uiComponent/CodeMirror.svelte';
 
 let id;
 
@@ -10,6 +11,26 @@ export let isActive=false;
 export let code="";
 export let pathValue=null;
 export let pointValue=null;
+
+
+/*
+Code mirror 
+*/
+let editor;
+const options = {
+		mode: "javascript",
+		lineNumbers: true,
+        value:code
+	}
+	
+	
+	
+	function changed(event) {
+        code=editor.getDoc().getValue();
+		//console.log('changed')
+		//console.log(event.detail)
+	}
+// end code mirror codes
 
 $:pathItems = db.FileList.map(b => ({'label': b.name, 'value': b.id}));
 $:pointItems = getPointList();
@@ -34,6 +55,7 @@ function changePageById(_id){
         // console.log(cm);
         isActive=cm.isActive;
         code=cm.code;
+        editor.getDoc().setValue(cm.code);
         pathValue= getPathValue(cm.cPath);
         pointValue=getPointValue(cm.cPoint,cm.cPath);
     }
@@ -119,7 +141,7 @@ function getPointList(){
 </script>
 
 <h3>Code:</h3>
-<textarea bind:value={code} style="width: 100%; height:200px"></textarea>
+<CodeMirror  on:change={changed} bind:editor {options} class="editor"/>
 <div class="row pb-1">
     <div class="col-2">
         <h4>Path :</h4>

@@ -34,7 +34,7 @@ import CodeMirror from './uiComponent/CodeMirror.svelte';
 	Cursor Activity: {cursor_activity}
 </p>
 <div>
-	<button on:click={() => editor.execCommand('selectAll')}>
+	<button on:click={() => console.log(editor)}>
 		Select All
 	</button>	
 	

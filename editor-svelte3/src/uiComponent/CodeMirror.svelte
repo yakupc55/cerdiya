@@ -85,7 +85,7 @@
     background-color: var(--cm-background-color);
     white-space: nowrap;
   }
-  :global(.CodeMirror-linenumbers) {}
+  
   :global(.CodeMirror-linenumber) {
     padding: 0 3px 0 5px;
     min-width: 20px;
