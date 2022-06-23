@@ -1,6 +1,6 @@
 <script context="module">
 
-import { db,noDb,changeDbData,resetDbData } from "./Datas.svelte";
+import { db,noDb,changeDbData,resetDbData,saveNoDbProjectToFromLocalforage } from "./Datas.svelte";
 const fs = require('fs');
 const electron = require('electron');
 
@@ -8,6 +8,9 @@ const changeNoDbPath =(path)=>{
     noDb.Project.path=path;
     const index=noDb.Project.path.lastIndexOf('\\');
     noDb.Project.rootPath=noDb.Project.path.substring(0,index+1);
+    noDb.Project.name=noDb.Project.path.substring(index+1,noDb.Project.path.length);
+    console.log(noDb);
+    saveNoDbProjectToFromLocalforage();
 }
 
 export const writeToDisk = (filePath)=>{

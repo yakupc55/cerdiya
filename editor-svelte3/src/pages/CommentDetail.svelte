@@ -16,6 +16,7 @@
     let description="";
     let isActive=false;    
     let code="";
+    let tabSize = 0;
     let pathValue=null;
     let pointValue=null;
     let id;
@@ -83,6 +84,7 @@
         db.Comments[index].cPath=(pathValue)?pathValue.value:"";
         db.Comments[index].cPoint=(pointValue)?pointValue.value:-1;
         db.Comments[index].code=code;
+        db.Comments[index].tabSize=tabSize;
         db.Comments[index].isActive=isActive;
         db.Comments[index].situations=getIdlist();
         saveCommentsToFromLocalforage();
@@ -151,7 +153,7 @@
 </div>
 
 {#if selectedNavPage==0}
-<CommentCode bind:changeId={sendId} bind:isActive={isActive} bind:code={code} bind:pathValue={pathValue} bind:pointValue={pointValue} />
+<CommentCode bind:changeId={sendId} bind:isActive={isActive} bind:tabSize={tabSize} bind:code={code} bind:pathValue={pathValue} bind:pointValue={pointValue} />
 {:else if selectedNavPage==1}
 
 <h3>Comment:</h3>

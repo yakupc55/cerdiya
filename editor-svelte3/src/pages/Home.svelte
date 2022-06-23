@@ -7,7 +7,7 @@
 
     onMount(async () => {
         setTimeout(() => {
-            noDb.Project.dataStatus=noDb.Project.dataStatus;
+            noDb.dataStatus=noDb.dataStatus;
             projectSettings=db.project;
         }, 200);
     });
@@ -21,11 +21,19 @@
     }
 
 </script>
-{#if noDb.Project.dataStatus}
+{#if noDb.dataStatus}
 <button type="button"  class="btn btn-primary " on:click={startNewProject}>Start New Project</button>
 <button type="button"  class="btn btn-primary " on:click={()=>{openProject(projectSettings)}} >Open a Project</button>
 <button type="button"  class="btn btn-primary " on:click={saveProject} >Save The Project</button>
 
+{#if noDb.Project.name.length>1}
+<br>
+<hr>
+
+<b style="font-size:18px">Project Name : </b> {noDb.Project.name}
+    <br>
+<b style="font-size:18px">Project Path : </b> {noDb.Project.path}
+{/if}
 <br>
 <hr>
 <div> 

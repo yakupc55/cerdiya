@@ -3,8 +3,6 @@
     import Fa from "svelte-fa";
     import { db,noDb } from "../Datas/Datas.svelte";
     import {writeToDisk} from "../Datas/projectOperations.svelte";
-    const electron = require('electron');
-    const path = require('path');
     const fs = require('fs');
 
     let tempDb=null;
@@ -15,7 +13,6 @@
 
     //first add to structure
     //console.log(tempDb);
-    let index=-1;
     let findex=-1;
     let pindex=-1;
     tempDb.Comments.forEach((comment,index) => {

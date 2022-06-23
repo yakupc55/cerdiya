@@ -47,7 +47,7 @@
                     <td>{item.name.substring(0,35)}</td>
                     <td>{item.path.substring(0,70)}</td>
                     <td
-                        ><span on:click={_deleteFile(item.path)}
+                        ><span on:click={_deleteFile(item.id)}
                             ><Fa icon={faCircleMinus} color="red" /></span
                         ></td
                     >

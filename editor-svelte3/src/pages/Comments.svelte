@@ -7,12 +7,12 @@
     import Fa from "svelte-fa";
     import { onMount } from 'svelte';
     
-    const firstComment ={comment: "new comment",description:"new",id:db.Counts.comment,code:"",isActive:false,cPath:-1,cPoint:0,situations:[]};
+    const firstComment ={comment: "new comment",description:"new",id:db.Counts.comment,code:"",tabSize:0,isActive:false,cPath:-1,cPoint:0,situations:[]};
     onMount(async () => {
         changeId(-1);
         //console.log(db);
 		if(db.Comments.length==0){
-            db.Comments = [{comment: "new comment",description:"new",id:db.Counts.comment,code:"",isActive:false,cPath:-1,cPoint:0,situations:[]}];
+            db.Comments = [{comment: "new comment",description:"new",id:db.Counts.comment,code:"",tabSize:0,isActive:false,cPath:-1,cPoint:0,situations:[]}];
             db.Counts.comment+=1;
             saveCommentsToFromLocalforage();
         }
@@ -55,7 +55,7 @@
         const addComment=(add)=>{
             let index = findIndexById(selectedIndex)+add;
             //console.log(index);
-            db.Comments.splice(index,0,{comment: "new comment",description:"new",id:db.Counts.comment,code:"",isActive:false,cPath:-1,cPoint:0,situations:[]});
+            db.Comments.splice(index,0,{comment: "new comment",description:"new",id:db.Counts.comment,code:"",tabSize:0,isActive:false,cPath:-1,cPoint:0,situations:[]});
             
             db.Comments= db.Comments;
             selectedIndex=db.Counts.comment;
