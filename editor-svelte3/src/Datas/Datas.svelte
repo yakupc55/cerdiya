@@ -15,7 +15,7 @@
         // {comment: "test12",description:"test12",code:"code12",isActive:false,id:11}
     ]
     export const db = {FileList:[],Situations:[],Counts:{situation:0,comment:0,file:0},Comments:[],project:{version:"v.0.0.1",projectMode:false}};
-    export const noDb={Project:{rootPath:'',path:'',dataStatus:false}}
+    export const noDb={Project:{rootPath:'',path:'',name:''},dataStatus:false}
 
     export const getFileListFromLocalforage = ()=>{
         localforage.getItem('fileList').then(data => {
@@ -74,7 +74,22 @@
         getSituationsFromLocalforage();
         getCommentsFromLocalforage();
         getProjectDetailFromLocalforage();
+        getNoDbProjectFromLocalforage();
+    }
 
+    export const getNoDbProjectFromLocalforage = ()=>{
+        localforage.getItem('noDb').then(data => {
+            if(data){
+              //  console.log("kayıt getirme başarılı");
+                noDb.Project=data;
+            }
+        });
+    }
+
+    export const saveNoDbProjectToFromLocalforage = ()=>{
+        localforage.setItem('noDb', noDb.Project).then((x)=> {
+       // console.log("kayıt başarılı")
+    });
     }
 
     export const getProjectDetailFromLocalforage = ()=>{
@@ -85,7 +100,7 @@
             }
         });
     }
-
+    
     export const saveAllCountsToFromLocalforage = ()=>{
         localforage.setItem('Counts', db.Counts).then((x)=> {
        // console.log("kayıt başarılı")
@@ -182,7 +197,7 @@
     onMount( () => {
         setTimeout(() => {
             getAllData();
-            noDb.Project.dataStatus=true;
+            noDb.dataStatus=true;
         }, 100);
 	});
 	onDestroy(() => {

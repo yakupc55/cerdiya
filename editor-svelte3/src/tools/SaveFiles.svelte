@@ -6,6 +6,15 @@
     const fs = require('fs');
 
     let tempDb=null;
+   
+    function addCodeLineByLine(data,tabSize){
+        let str="";
+        const lines=data.split(/\r\n|\r|\n/);
+            lines.forEach((line)=>{
+            str+="\t".repeat(tabSize)+line+"\n";
+        })
+        return str;
+    }
 
     function saveFiles(){  
     //console.log("savefiles is working");
@@ -26,9 +35,9 @@
                 // console.log(test);
                 if(pindex>-1){
                     if(tempDb.FileList[findex].Structure[pindex].code){
-                        tempDb.FileList[findex].Structure[pindex].code+="\n"+comment.code;
+                        tempDb.FileList[findex].Structure[pindex].code+=addCodeLineByLine(comment.code,comment.tabSize);
                     }else{
-                        tempDb.FileList[findex].Structure[pindex].code=comment.code;
+                        tempDb.FileList[findex].Structure[pindex].code=addCodeLineByLine(comment.code,comment.tabSize);
                     }
                     //console.log(tempDb.FileList[findex].Structure[pindex].code);
                 }
@@ -51,7 +60,7 @@
                 Files[index].data+=point.value+"\n";
             }else{
                 if(point.code){
-                    Files[index].data+=point.code+"\n";
+                    Files[index].data+=point.code;
                 }
             }
             
