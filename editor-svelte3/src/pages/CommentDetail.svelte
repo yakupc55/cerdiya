@@ -4,7 +4,7 @@
     import Select from 'svelte-select';
     import {flip} from 'svelte/animate';
     import { quintOut } from "svelte/easing";
-    import {db,saveCommentsToFromLocalforage} from '../Datas/Datas.svelte';
+    import {db,saveCommentsToFromLocalforage,commentTypes} from '../Datas/Datas.svelte';
     import {faSave } from "@fortawesome/free-solid-svg-icons";
     import Fa from "svelte-fa";
     import { onMount } from 'svelte';
@@ -19,9 +19,10 @@
     let tabSize = 0;
     let pathValue=null;
     let pointValue=null;
+    let typeValue=null;
     let id;
     let firstIndex=-1;
-
+    $:typeItems = commentTypes.map(b => ({'label': b.name, 'value': b.id}));
    
     $:situationsItems = getSituationsList();
     onMount(async () => {
@@ -29,6 +30,14 @@
         //cPaht not empty .find index by path.later use this index to add value to pathValue
         
 	});
+
+    function getTypeValue(id){
+        if(id>=0){
+           const cmT= commentTypes[id];
+           return  {'label': cmT.name, 'value': cmT.id};
+        }
+        return null;
+    }
 
     function getSituationsValues(list){
         if(list && list.length>0 && firstIndex>=0){
@@ -86,6 +95,7 @@
         db.Comments[index].code=code;
         db.Comments[index].tabSize=tabSize;
         db.Comments[index].isActive=isActive;
+        db.Comments[index].type=(typeValue)?typeValue.value:-1
         db.Comments[index].situations=getIdlist();
         saveCommentsToFromLocalforage();
         refresh();
@@ -114,6 +124,7 @@
             comment=cm.comment;
             description=cm.description;
             situationsValues=getSituationsValues(cm.situations);
+            typeValue=getTypeValue(cm.type);
         }
     }
 
@@ -156,10 +167,16 @@
 <CommentCode bind:changeId={sendId} bind:isActive={isActive} bind:tabSize={tabSize} bind:code={code} bind:pathValue={pathValue} bind:pointValue={pointValue} />
 {:else if selectedNavPage==1}
 
-<h3>Comment:</h3>
+<h5>Comment:</h5>
 <textarea bind:value={comment} style="width: 100%; height:120px"></textarea>
-<h3>Description:</h3>
+<h5>Description:</h5>
 <textarea bind:value={description} style="width: 100%; height:240px"></textarea>
+<h5> Comment Type
+    <Select
+    items={typeItems}
+    bind:value={typeValue}
+    ></Select>
+</h5>
 
 
 {:else if selectedNavPage==2}
