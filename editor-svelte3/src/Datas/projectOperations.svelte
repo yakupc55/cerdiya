@@ -22,7 +22,20 @@ export const writeToDisk = (filePath)=>{
         });
 }
 
-export const openProject = async function(changer) {
+export const openProjectWithUrl = (url)=>{
+    // console.log("url :");
+    // console.log(url);
+    fs.readFile(url, function (error, content) {
+        console.log("its good")
+        var test = JSON.parse(content);
+        console.log(test);
+        changeDbData(test);
+        console.log(db);
+    });
+    changeNoDbPath(url);
+}
+
+export const openProject = async function() {
     const o = await electron.remote.dialog.showOpenDialog({
         title: 'Select a file',
         filters: [{
@@ -32,18 +45,7 @@ export const openProject = async function(changer) {
         properties: ['openFile']
     });
     if(o.filePaths.length > 0) {
-        console.log("o.filePaths[0] :");
-        console.log(o.filePaths[0]);
-        console.log(o.filePaths[0]);
-        fs.readFile(o.filePaths[0], function (error, content) {
-            console.log("its good")
-            var test = JSON.parse(content);
-            console.log(test);
-            changeDbData(test);
-            console.log(db);
-            changer=db.project;
-        });
-        changeNoDbPath(o.filePaths[0]);
+        openProjectWithUrl(o.filePaths[0]);
     }
 };
 

@@ -5,8 +5,13 @@
 	import Home from './pages/Home.svelte';
 	import AddFile from './pages/AddFile.svelte';
     import TestPage from './pages/TestPage.svelte';
+	import { onMount } from 'svelte';
     import {st} from "./Datas/stores";
 	import SaveButton from "./tools/SaveFiles.svelte";
+
+	onMount(async () => {
+		
+	});
     const ccolor="bg-secondary active";
 	let currentPageComponent=Home;
 
@@ -16,6 +21,8 @@
 			{name:"File structure", component:FileStructure,active:false,ccolor:""},
 			{name:"Situations", component:Situations,active:false,ccolor:""},
 			{name:"Comments", component:Comments,active:false,ccolor:""},
+			{name:"Variables", component:TestPage,active:false,ccolor:""},
+			{name:"Modes", component:TestPage,active:false,ccolor:""},
 			{name:"Test page", component:TestPage,active:false,ccolor:""}
 		];
     const changePage= (index)=>{

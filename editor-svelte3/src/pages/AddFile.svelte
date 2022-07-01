@@ -6,7 +6,7 @@
     import { onMount,onDestroy } from 'svelte';
     import { addFilesToList,deleteFile } from "../Datas/fileOperations.svelte";
     import {addFilesSubscribes} from "../Datas/stores";
-
+    
     const electron = require("electron");
     let isFirstStart= true;
     onMount(async () => {

@@ -2,7 +2,27 @@
 	import { createEventDispatcher } from 'svelte';
     import {db,noDb,saveProjectDetailToFromLocalforage,changeRootFiles} from '../Datas/Datas.svelte';
     import { onMount, onDestroy } from "svelte";
-    import {saveProject,openProject,startNewProject} from '../Datas/projectOperations.svelte';
+    import {saveProject,openProject,startNewProject,openProjectWithUrl} from '../Datas/projectOperations.svelte';
+
+    import {addFilesSubscribes} from "../Datas/stores";
+    let isFirstStart= true;
+
+    const _addFilesToList = (value)=>{ openProjectWithUrl(value[0].path) }
+    
+    const smodes= {
+        dragDropFiles:_addFilesToList
+    }
+    
+    const unsubscribe = addFilesSubscribes.subscribe(data => {
+        if(!isFirstStart){
+            console.log(data);
+            smodes[data.mode](data.value);
+        }else{
+          //  console.log("firs start is active");
+            isFirstStart = false;
+        }	
+	});
+
     let projectSettings=db.project;
 
     onMount(async () => {
@@ -23,7 +43,7 @@
 </script>
 {#if noDb.dataStatus}
 <button type="button"  class="btn btn-primary " on:click={startNewProject}>Start New Project</button>
-<button type="button"  class="btn btn-primary " on:click={()=>{openProject(projectSettings)}} >Open a Project</button>
+<button type="button"  class="btn btn-primary " on:click={()=>{openProject()}} >Open a Project</button>
 <button type="button"  class="btn btn-primary " on:click={saveProject} >Save The Project</button>
 
 {#if noDb.Project.name.length>1}
