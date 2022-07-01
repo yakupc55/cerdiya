@@ -76,6 +76,11 @@ function getPointValue(pointId,pathId){
 }
 
 function findIndexbyPoint(pointId){
+    // console.log("listIndex");
+    // console.log(listIndex);
+    // console.log("db.FileList[listIndex]");
+    // console.log(db.FileList[listIndex]);
+
     for(let i=0;i<db.FileList[listIndex].Structure.length;i++){
         if(db.FileList[listIndex].Structure[i].id==pointId){
             return i;

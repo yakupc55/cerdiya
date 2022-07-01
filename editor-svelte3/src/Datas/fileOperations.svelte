@@ -29,6 +29,10 @@ export const addFilesToList = (addFiles) => {
         return db.FileList;
     };
     export const deleteFile = (id) => {
+        // console.log("db.FileList :");
+        // console.log(db.FileList);
+        // console.log("id :");
+        // console.log(id);
         db.FileList = db.FileList.filter((x) => x.id != id);
         saveFileListToFromLocalforage();
         return db.FileList;
