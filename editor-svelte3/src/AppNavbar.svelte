@@ -8,6 +8,8 @@
 	import { onMount } from 'svelte';
     import {st} from "./Datas/stores";
 	import SaveButton from "./tools/SaveFiles.svelte";
+import Variables from './pages/Variables.svelte';
+import Modes from './pages/Modes.svelte';
 
 	onMount(async () => {
 		
@@ -21,8 +23,8 @@
 			{name:"File structure", component:FileStructure,active:false,ccolor:""},
 			{name:"Situations", component:Situations,active:false,ccolor:""},
 			{name:"Comments", component:Comments,active:false,ccolor:""},
-			{name:"Variables", component:TestPage,active:false,ccolor:""},
-			{name:"Modes", component:TestPage,active:false,ccolor:""},
+			{name:"Variables", component:Variables,active:false,ccolor:""},
+			{name:"Modes", component:Modes,active:false,ccolor:""},
 			{name:"Test page", component:TestPage,active:false,ccolor:""}
 		];
     const changePage= (index)=>{

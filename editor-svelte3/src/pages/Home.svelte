@@ -15,10 +15,10 @@
     
     const unsubscribe = homeSubscribes.subscribe(data => {
         if(!isFirstStart){
-            console.log(data);
+            // console.log(data);
             smodes[data.mode](data.value);
         }else{
-            console.log("firs start is active");
+            // console.log("firs start is active");
             isFirstStart = false;
         }	
 	});

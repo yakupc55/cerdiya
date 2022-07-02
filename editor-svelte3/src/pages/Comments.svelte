@@ -7,12 +7,12 @@
     import Fa from "svelte-fa";
     import { onMount } from 'svelte';
     
-    const firstComment ={comment: "new comment",description:"new",id:db.Counts.comment,code:"",tabSize:0,isActive:false,type:-1,cPath:-1,cPoint:0,situations:[]};
+    const firstComment ={comment: "new comment",description:"new",id:db.Counts.comment,code:"",tabSize:0,isActive:false,type:0,cPath:-1,cPoint:0,situations:[]};
     onMount(async () => {
         changeId(-1);
         //console.log(db);
 		if(db.Comments.length==0){
-            db.Comments = [{comment: "new comment",description:"new",id:db.Counts.comment,code:"",tabSize:0,isActive:false,type:-1,cPath:-1,cPoint:0,situations:[]}];
+            db.Comments = [{comment: "new comment",description:"new",id:db.Counts.comment,code:"",tabSize:0,isActive:false,type:0,cPath:-1,cPoint:0,situations:[]}];
             db.Counts.comment+=1;
             saveCommentsToFromLocalforage();
         }
@@ -41,6 +41,10 @@
             return -1;
         }
         
+        const doubleClick=()=>{
+            console.log("dobule click is working");
+        }
+
         const deleteComment=()=>{
             if(db.Comments.length>1){let index = findIndexById(selectedIndex);
             db.Comments.splice(index,1);
@@ -55,7 +59,7 @@
         const addComment=(add)=>{
             let index = findIndexById(selectedIndex)+add;
             //console.log(index);
-            db.Comments.splice(index,0,{comment: "new comment",description:"new",id:db.Counts.comment,code:"",tabSize:0,isActive:false,type:-1,cPath:-1,cPoint:0,situations:[]});
+            db.Comments.splice(index,0,{comment: "new comment",description:"new",id:db.Counts.comment,code:"",tabSize:0,isActive:false,type:0,cPath:-1,cPoint:0,situations:[]});
             
             db.Comments= db.Comments;
             selectedIndex=db.Counts.comment;
@@ -81,6 +85,9 @@
 <div class="test">
     <div class="row p-0 m-0">
         <div class="col-6 bg-primary">
+            <div class="position-sticky text-white">
+               <a >root</a> > 
+            </div>
             {#if selectedIndex>=0}
             <center>
                 <div class="w-50 position-sticky" style="height:40px">
@@ -102,11 +109,13 @@
                     animate:flip={options}
                     draggable={true} 
                     on:click={()=>{selectedIndex=comment.id;changeId(comment.id);}}
+                    on:dblclick={doubleClick}
                     on:dragstart={event => _dragstartList(event, index)}
                     on:drop|preventDefault={event => dropList(event, index)}
                     ondragover="return false"
                     on:dragenter={() => hovering = index}
-                    class:is-inavtive={!comment.isActive && selectedIndex!=comment.id}
+                    class:is-inactive={!comment.isActive && selectedIndex!=comment.id}
+                    class:is-folder={comment.type==1}
                     class:selected={selectedIndex==comment.id}
                     class="card cm-card m-1 p-0">
                         {comment.comment}    
@@ -137,8 +146,10 @@
         width: 100%;
         overflow: hidden;
     }
-    .is-inavtive{
+    .is-inactive{
         opacity: 0.9;
         background-color: rgb(244, 149, 149) !important;
     }
-</style>
+    .is-folder{
+        background-color: rgb(64, 79, 240) !important;
+    }</style>

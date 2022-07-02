@@ -9,7 +9,7 @@ const changeNoDbPath =(path)=>{
     const index=noDb.Project.path.lastIndexOf('\\');
     noDb.Project.rootPath=noDb.Project.path.substring(0,index+1);
     noDb.Project.name=noDb.Project.path.substring(index+1,noDb.Project.path.length);
-    console.log(noDb);
+    // console.log(noDb);
     saveNoDbProjectToFromLocalforage();
 }
 
@@ -28,7 +28,7 @@ export const openProjectWithUrl = (url)=>{
     fs.readFile(url, function (error, content) {
         console.log("its good")
         var test = JSON.parse(content);
-        console.log(test);
+        // console.log(test);
         changeDbData(test);
         console.log(db);
     });
@@ -66,8 +66,8 @@ export const startNewProject = async function(){
         resetDbData();
         writeToDisk(o.filePath);
         electron.remote.dialog.showMessageBox({ message: "Exported data to " + o.filePath, buttons: ["OK"] });
-        console.log("no db path");
-        console.log(noDb.Project.path);
+        // console.log("no db path");
+        // console.log(noDb.Project.path);
     }
 }
 
@@ -83,7 +83,7 @@ const o = await electron.remote.dialog.showSaveDialog({
 });
 
 if(o.filePath) {
-    console.log(o.filePath);
+    // console.log(o.filePath);
     writeToDisk(o.filePath);
     electron.remote.dialog.showMessageBox({ message: "Exported data to " + o.filePath, buttons: ["OK"] });
     changeNoDbPath(o.filePath);

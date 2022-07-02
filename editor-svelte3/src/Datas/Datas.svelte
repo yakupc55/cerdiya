@@ -15,8 +15,8 @@
         // {comment: "test12",description:"test12",code:"code12",isActive:false,id:11}
     ]
     export const commentTypes= [
-        {name:"folder", id:0},
-        {name:"code", id:1},
+        {name:"code", id:0},
+        {name:"folder", id:1},
         {name:"mod", id:2},
     ];
     export const db = {FileList:[],Situations:[],Counts:{situation:0,comment:0,file:0},Comments:[],project:{version:"v.0.0.1",projectMode:false}};
